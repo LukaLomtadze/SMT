@@ -2,7 +2,8 @@ import mongoose from "mongoose"
 import User from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js"
-import { sendEmail } from "../utils/sendEmail.js"
+import { sendEmail, sendPasswordResetEmail, sendResetPasswordSuccess, sendWelcomeEmail } from "../utils/sendEmail.js"
+import crypto from "crypto";
 
 export const signup = async(req, res) => {
     
@@ -32,11 +33,40 @@ export const signup = async(req, res) => {
         })
 
         generateTokenAndSetCookie(res, newUser._id)
-        sendEmail(email, verificationToken);
+        sendEmail(email, verificationToken, name);
 
         await newUser.save()
 
         res.status(201).json({success:true, message: "User created succesfully"})
+    }
+    catch(err){
+        console.error("Error: ", err)
+    }
+}
+
+
+
+export const verifyEmail = async (req, res) => {
+    const {code} = req.body;
+    try{
+        const user = await User.findOne({
+            verificationToken: code,
+            verificationTokeExpiresAt: {$gt : Date.now()}
+        })
+
+        if(!user){
+            return res.status(400).json({success:false, message: "Invalid or Expired verification code"})
+        }
+
+        user.isVerified =true
+        user.verificationToken = undefined
+        user.verificationTokeExpiresAt = undefined,
+
+        await user.save();
+
+        sendWelcomeEmail(user.email, user.name);
+
+        res.status(200).json({success: true, message: "Email Verified Successfully"});
     }
     catch(err){
         console.error("Error: ", err)
@@ -52,6 +82,9 @@ export const  login = async(req, res) => {
         if(!user){
             return res.status(404).json({success:false, message: "User not found"});
         }
+        if(!user.isVerified){
+            return res.status(400).json({success: false, message: "Please verify you email first"})
+        }
 
         const isPasswordValid = await bcrypt.compare(password, user.password)
 
@@ -62,9 +95,9 @@ export const  login = async(req, res) => {
         generateTokenAndSetCookie(res, user._id)
         
 
-        res.status(201).json({
+        res.status(200).json({
             success: true,
-            message:"Loged in successfully",
+            message:"Logged in successfully",
             user: {
                 ...user._doc,
                 password: undefined
@@ -92,9 +125,58 @@ export const logout = async(req, res) => {
     }
 }
 
-export const verifyEmail = async (req, res) => {
+export const forgotPassword = async(req, res) => {
+    const {email} = req.body
     try{
-        
+        const user = await User.findOne({email});
+
+        if(!user){
+            return res.status(400).json({success:false, message:"User not found"});
+        }
+
+        const resetToken = crypto.randomBytes(20).toString("hex");
+        const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000 //1hour
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+        await user.save();
+
+        sendPasswordResetEmail(email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`, user.name)
+
+        res.status(200).json({ success: true, message:"Reset token sent" });
+    }catch(err){
+        console.error("Error: ", err);
+    }
+}
+
+
+export const resetPassword = async (req, res) => {
+    try{
+        const {token} = req.params;
+        const {password} = req.body;
+
+        const user = await User.findOne({
+            resetPasswordToken : token,
+            resetPasswordExpiresAt : {$gt : Date.now()}
+        })
+
+        if(!user){
+            return res.status(400).json({success: false, message: "Invalid or expired reset token"})
+        }
+
+        //parolis shecval aq iwyeba
+
+        const hashedPass = await bcrypt.hash(password, 10);
+        user.password = hashedPass;
+        user.resetPasswordExpiresAt = undefined;
+        user.resetPasswordToken = undefined;
+
+        await user.save();
+
+        sendResetPasswordSuccess(user.email, user.name);
+
+        res.status(200).json({success: true, message: "Password updated"})
     }
     catch(err){
         console.error("Error: ", err)
