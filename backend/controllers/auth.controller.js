@@ -5,20 +5,16 @@ import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js
 import { sendEmail, sendPasswordResetEmail, sendResetPasswordSuccess, sendWelcomeEmail } from "../utils/sendEmail.js"
 import crypto from "crypto";
 
-export const signup = async(req, res) => {
-    
-    const {email, name, password} = req.body;
-    try{
-        const user = await User.findOne({email})
-        
-        if(!email || !password || !name){
-            return res.status(401).json({success:false, message:"All fields are required"})
+export const signup = async (req, res) => {
+    const { email, name, password } = req.body;
+    try {
+        if (!email || !password || !name) {
+            return res.status(401).json({ success: false, message: "All fields are required" });
         }
 
-        const userAlreadyExists = await User.findOne({email})
-
-        if(userAlreadyExists){
-            return res.status(400).json({success: false, message: "User with that email address already exists"});
+        const userAlreadyExists = await User.findOne({ email });
+        if (userAlreadyExists) {
+            return res.status(400).json({ success: false, message: "User with that email address already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,21 +25,32 @@ export const signup = async(req, res) => {
             name,
             password: hashedPassword,
             verificationToken,
-            verificationTokeExpiresAt: Date.now() + 24 * 60 * 60 * 1000 // 24 saati
-        })
+            verificationTokeExpiresAt: Date.now() + 24 * 60 * 60 * 1000
+        });
 
-        generateTokenAndSetCookie(res, newUser._id)
-        sendEmail(email, verificationToken, name);
+        await newUser.save(); 
 
-        await newUser.save()
+        generateTokenAndSetCookie(res, newUser._id);
 
-        res.status(201).json({success:true, message: "User created succesfully"})
+        try {
+            await sendEmail(email, verificationToken, name); 
+        } catch (emailErr) {
+            console.error("Email sending failed:", emailErr);
+        }
+
+        res.status(201).json({
+            success: true,
+            message: "User created successfully",
+            user: {
+                ...newUser._doc,
+                password: undefined,
+            }
+        });
+    } catch (err) {
+        console.error("Error:", err);
+        res.status(500).json({ success: false, message: "Server error" });
     }
-    catch(err){
-        console.error("Error: ", err)
-    }
-}
-
+};
 
 
 export const verifyEmail = async (req, res) => {
@@ -180,5 +187,26 @@ export const resetPassword = async (req, res) => {
     }
     catch(err){
         console.error("Error: ", err)
+    }
+}
+
+
+export const checkAuth = async (req, res) => {
+    try {
+        if (!req.userId) {
+            return res.status(401).json({ success: false, message: "Unauthorized - No token provided" });
+        }
+
+        const user = await User.findById(req.userId).select("-password");
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        return res.status(200).json({ success: true, user });
+
+    } catch (error) {
+        console.error("Error: ", error);
+        return res.status(500).json({ success: false, message: "Server error" });
     }
 }

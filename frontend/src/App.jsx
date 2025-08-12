@@ -1,0 +1,135 @@
+import { Navigate, Route, Routes, useLocation } from "react-router-dom"
+import FloatingShape from "./components/FloatingShape"
+import HomePage from "./pages/HomePage"
+import SignUpPage from "./pages/SignUpPage"
+import LogInPage from "./pages/LogInPage"
+import VerifyEmail from "./pages/VerifyEmail"
+import { Toaster } from "react-hot-toast"
+import { useAuthStore } from "./stateManagment/authStore"
+import { useEffect } from "react"
+import Sidebar from "./Sidebar/Sidebar"
+import { useState } from "react"
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
+
+//route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
+const ProtectRoute = ({ children }) => {
+	const { isAuthenticated, isCheckingAuth } = useAuthStore();
+	const location = useLocation();
+
+  if(isCheckingAuth){
+    return (
+      <div className="min-h-screen flex items-center text-3xl justify-center bg-[#212121] text-sky-400">
+        <AiOutlineLoading3Quarters className="animate-spin mx-auto" />
+      </div>
+    )
+  }
+
+	if (!isAuthenticated) {
+		if (location.pathname === "/signup") {
+			return <Navigate to="/signup" replace />
+		}
+		return <Navigate to="/login" replace />;
+	}
+
+	
+	return children;
+};
+
+//gadamisamarteba tu ukve acauntze shesulebi arian da mainc /login /signup ze gadavlian avtomatural home pageze miarwobs
+const RedirectAuthenticatedUser = ({children}) => {
+  const {isAuthenticated, user, isCheckingAuth} = useAuthStore()
+
+  if(isCheckingAuth){
+    return (
+      <div className="min-h-screen flex items-center text-3xl justify-center bg-[#212121] text-sky-400">
+        <AiOutlineLoading3Quarters className="animate-spin mx-auto" />
+      </div>
+    )
+  }
+
+  if(isAuthenticated && user?.isVerified){
+    return <Navigate to={"/"} replace />
+  }
+
+  return children
+}
+
+function App() {
+  const location = useLocation();
+  const { checkAuth, isAuthenticated } = useAuthStore();
+
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  useEffect(() => {
+    const hideOnPaths = ["/verify-email", "/signup", "/login"];
+    setShowSidebar(isAuthenticated && !hideOnPaths.includes(location.pathname));
+  }, [location.pathname, isAuthenticated]); // now it will update on route change
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  const [open, setOpen] = useState(
+    typeof window !== "undefined" && window.innerWidth >= 768
+  );
+
+  useEffect(() => {
+    let resizeTimer;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        setOpen(window.innerWidth >= 768);
+      }, 150);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br bg-[#212121]">
+      {showSidebar && <Sidebar open={open} setOpen={setOpen} />}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectRoute>
+              <HomePage open={open} />
+            </ProtectRoute>
+          }
+        ></Route>
+        <Route
+          path="/signup"
+          element={
+            <RedirectAuthenticatedUser>
+              <SignUpPage />
+            </RedirectAuthenticatedUser>
+          }
+        ></Route>
+        <Route
+          path="/login"
+          element={
+            <RedirectAuthenticatedUser>
+              <LogInPage />
+            </RedirectAuthenticatedUser>
+          }
+        ></Route>
+        <Route
+          path="/verify-email"
+          element={
+            <RedirectAuthenticatedUser>
+              <VerifyEmail />
+            </RedirectAuthenticatedUser>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+
+      <Toaster />
+    </div>
+  );
+}
+
+export default App
