@@ -78,6 +78,17 @@ export const useAuthStore = create((set) => ({
         }
     },
 
+    updatePassword: async(password) => {
+        set({isLoading: true, error: null});
+        try{
+            const response = await axios.put(`${API_URL}/updatepassword`, {password})
+            set({isLoading: false, message: response.data.message})
+        }catch(err){
+            set({isLoading: false, errorMonitor: err.response.message || "Error updating password"})
+            throw err;
+        }
+    },
+
     checkAuth: async () => {
         set({ isCheckingAuth: true, error: null });
         try {

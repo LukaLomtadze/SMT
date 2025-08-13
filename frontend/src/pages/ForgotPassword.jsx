@@ -48,8 +48,11 @@ const ForgotPassword = () => {
       </div>
       ) : (
         <div className='w-screen h-screen flex items-center justify-center'>
-          <div className='flex flex-col gap-3 flex-wrap text-wrap text-white bg-neutral-900 h-60 md:h-38 items-center justify-center p-5 rounded-xl'>
-            <p className='text-2xl text-center'>If account exists for {email} you will recieve a password reset link. </p>
+          <div className='flex flex-col gap-3 flex-wrap text-wrap w-[420px] text-white bg-neutral-900 h-72 md:h-60 items-center justify-center p-5 rounded-xl'>
+            <p className='text-2xl text-center'>You will recieve a password</p>
+            <p>reset link at the address: </p>
+            <p>{email}</p>
+            <div className='w-12 h-12 bg-white rounded-full flex items-center justify-center text-black text-2xl'>✓</div>
             <p className='text-neutral-400 text-center'>
             you can close this page if you want
             </p>

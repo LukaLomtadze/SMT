@@ -13,6 +13,7 @@ import { useSidebarStore } from "./Sidebar/useSidebarStore"
 import LogOutNotifier from "./Sidebar/LogOutNotifier"
 import ResetPassword from "./pages/ResetPassword"
 import ForgotPassword from "./pages/ForgotPassword"
+import Profile from "./pages/Profile"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
 const ProtectRoute = ({ children }) => {
@@ -100,7 +101,7 @@ function App() {
   const{isOpen} = useSidebarStore()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-[#212121]">
+    <div className="min-h-screen bg-[#212121]">
       {showSidebar && <Sidebar open={open} setOpen={setOpen} />
       }
       <Routes>
@@ -112,6 +113,14 @@ function App() {
             </ProtectRoute>
           }
         ></Route>
+
+        <Route path="/account/:id" element={
+          <ProtectRoute>
+            <Profile open={open} />
+          </ProtectRoute>
+        }>
+        </Route>
+
         <Route
           path="/signup"
           element={
@@ -120,6 +129,7 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         ></Route>
+
         <Route
           path="/login"
           element={
@@ -128,6 +138,7 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         ></Route>
+
         <Route
           path="/verify-email"
           element={
@@ -136,14 +147,18 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
+
         <Route path="/forgot-password" element={<RedirectAuthenticatedUser>
           <ForgotPassword />
         </RedirectAuthenticatedUser>}></Route>
+
         <Route path="/reset-password/:token" element={<RedirectAuthenticatedUser>
           <ResetPassword />
         </RedirectAuthenticatedUser>}>
         </Route>
+
         <Route path="*" element={<Navigate to="/" replace />} />
+
       </Routes>
       {
           isOpen && <LogOutNotifier />

@@ -190,6 +190,61 @@ export const resetPassword = async (req, res) => {
     }
 }
 
+export const updatePassword = async (req, res) => {
+    try {
+        const {oldPassword, newPassword} = req.body;
+
+        if(!oldPassword || !newPassword){
+            return res.status(400).json({success: false, message: "Both old and new passwords are required"})
+        }
+
+        const user = await User.findById(req.userId);
+        if(!user){
+            return res.status(400).json({success: false, message: "User not found"})
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if(!isMatch){
+            return res.status(404).json({success:false, message: "Old password is incorect"})
+        }
+
+        const hashedPass = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPass;
+        await user.save()
+
+        return res.status(200).json({success: true, message: "Password updated succesfully"});
+    } catch (error) {
+        console.error("Error updating password:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+
+}
+
+export const getUsers = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select("name email profilePic");
+        if (!user) return res.status(404).json({ message: "User not found" });
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+export const findUsers = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+            .select("name email");
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
 
 export const checkAuth = async (req, res) => {
     try {

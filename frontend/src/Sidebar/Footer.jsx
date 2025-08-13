@@ -3,6 +3,8 @@ import { RiExpandUpDownLine } from "react-icons/ri";
 import { useState, useRef, useEffect } from 'react';
 import DropDown from './DropDown';
 import { useAuthStore } from '../stateManagment/authStore';
+import { useProfileStore } from '../stateManagment/profileStore';
+import { MdVerified } from 'react-icons/md';
 
 const Footer = ({visible}) => {
 
@@ -32,21 +34,24 @@ const Footer = ({visible}) => {
 
     const {user} = useAuthStore()
 
+    const {defaultPic} = useProfileStore()
+
     if(!user){
         return null
     }
 
-    const imageURL = "https://s3.eu-central-1.amazonaws.com/uploads.mangoweb.org/shared-prod/visegradfund.org/uploads/2021/08/placeholder-male.jpg"
+    // const imageURL = "https://s3.eu-central-1.amazonaws.com/uploads.mangoweb.org/shared-prod/visegradfund.org/uploads/2021/08/placeholder-male.jpg"
+
     const email = user.email || "";
     const name = user.name || "";
 
   return (
     <div>
-    <div ref={footerRef} className={` rounded-[10px] flex ${visible ? "px-3 py-1 hover:bg-[#262626]" : "flex-col"} items-center gap-2`}
+    <div ref={footerRef} className={` rounded-[10px] flex ${visible ? "px-3 py-1 hover:bg-[#262626]" : "flex-col mb-3 "} items-center gap-2`}
         onClick={visible ? openDropDown : undefined}
     >
         
-        <img className={` transition-all duration-300 ease-in-out cursor-pointer ${visible ? "w-[40px] h-[40px] rounded-2xl" : "w-[35px] h-[35px] rounded-[10px]"}`} src={imageURL}
+        <img className={` transition-all duration-300 ease-in-out cursor-pointer ${visible ? "w-[40px] h-[40px] rounded-2xl" : "w-[35px] h-[35px]"} rounded-full`} src={defaultPic}
             onClick={(e) => {
                 if(!visible){
                     openDropDown(); 
@@ -58,7 +63,7 @@ const Footer = ({visible}) => {
        {visible && (
         <div className='flex flex-row justify-between w-[250px] items-center'>
             <div className='flex flex-col'>
-                <span className='text-white text-[12px]'>{name}</span>
+                <div className='-mt-2 flex flex-row items-center gap-1'><span className='text-white text-[12px]'>{name}</span><MdVerified className='text-sky-400 text-sm' /></div>
                 <span className='text-white text-[10px]'>{email}</span>
             </div>
             <RiExpandUpDownLine />
@@ -67,7 +72,7 @@ const Footer = ({visible}) => {
             
     </div>
 
-    <DropDown ref={dropDownRef} opened={open} setOpen={setOpen} isVisible={visible} image={imageURL} name={name} email={email} />
+    <DropDown ref={dropDownRef} opened={open} setOpen={setOpen} isVisible={visible} image={defaultPic} name={name} email={email} />
     </div>
   )
 }
