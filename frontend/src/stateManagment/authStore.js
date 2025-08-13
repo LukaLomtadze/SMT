@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import axios from "axios";
-import { FaS } from "react-icons/fa6";
 
 const API_URL = "http://localhost:4040/api/auth";
 
@@ -54,6 +53,27 @@ export const useAuthStore = create((set) => ({
             set({isAuthenticated: false, isLoading:false, user: null, error: null})
         }catch(error){
             set({error: null, isLoading: false, isAuthenticated: false})
+            throw error
+        }
+    },
+
+    forgotPassword: async(email) => {
+        set({isLoading: true, error:null})
+        try {
+            const response = await axios.post(`${API_URL}/forgot-password`, {email})
+            set({isLoading: false, message: response.data.message})
+        } catch (error) {
+            set({isLoading: false, error: error.response.data.message || "Error sending reset password email"})
+            throw error
+        }
+    },
+    resetPassword: async(password, token) => {
+        set({isLoading: true, error:null})
+        try {
+            const response = await axios.post(`${API_URL}/reset-password/${token}`, {password})
+            set({isLoading: false, message: response.data.message})
+        } catch (error) {
+            set({isLoading: false, error: error.response.data.message || "Error resetting password... try again"})
             throw error
         }
     },

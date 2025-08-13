@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes, useLocation } from "react-router-dom"
-import FloatingShape from "./components/FloatingShape"
 import HomePage from "./pages/HomePage"
 import SignUpPage from "./pages/SignUpPage"
 import LogInPage from "./pages/LogInPage"
@@ -10,6 +9,10 @@ import { useEffect } from "react"
 import Sidebar from "./Sidebar/Sidebar"
 import { useState } from "react"
 import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import { useSidebarStore } from "./Sidebar/useSidebarStore"
+import LogOutNotifier from "./Sidebar/LogOutNotifier"
+import ResetPassword from "./pages/ResetPassword"
+import ForgotPassword from "./pages/ForgotPassword"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
 const ProtectRoute = ({ children }) => {
@@ -28,6 +31,12 @@ const ProtectRoute = ({ children }) => {
 		if (location.pathname === "/signup") {
 			return <Navigate to="/signup" replace />
 		}
+    else if(location.pathname === "/forgot-password"){
+      return <Navigate to={"/forgot-password"} replace />
+    }
+    else if(location.pathname === "/reset-password/:token"){
+      return <Navigate  to={"/reset-password/:token"} replace/>
+    }
 		return <Navigate to="/login" replace />;
 	}
 
@@ -88,9 +97,12 @@ function App() {
     };
   }, []);
 
+  const{isOpen} = useSidebarStore()
+
   return (
     <div className="min-h-screen bg-gradient-to-br bg-[#212121]">
-      {showSidebar && <Sidebar open={open} setOpen={setOpen} />}
+      {showSidebar && <Sidebar open={open} setOpen={setOpen} />
+      }
       <Routes>
         <Route
           path="/"
@@ -124,8 +136,18 @@ function App() {
             </RedirectAuthenticatedUser>
           }
         />
+        <Route path="/forgot-password" element={<RedirectAuthenticatedUser>
+          <ForgotPassword />
+        </RedirectAuthenticatedUser>}></Route>
+        <Route path="/reset-password/:token" element={<RedirectAuthenticatedUser>
+          <ResetPassword />
+        </RedirectAuthenticatedUser>}>
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      {
+          isOpen && <LogOutNotifier />
+      }
 
       <Toaster />
     </div>

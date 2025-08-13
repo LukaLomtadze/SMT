@@ -67,7 +67,7 @@ const Footer = ({visible}) => {
             
     </div>
 
-    <DropDown ref={dropDownRef} opened={open} isVisible={visible} image={imageURL} name={name} email={email} />
+    <DropDown ref={dropDownRef} opened={open} setOpen={setOpen} isVisible={visible} image={imageURL} name={name} email={email} />
     </div>
   )
 }

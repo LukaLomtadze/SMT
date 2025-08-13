@@ -35,8 +35,8 @@ const SignUpPage = () => {
   return (
     <div className='w-screen h-screen flex items-center justify-center'>
         <form className='text-white' onSubmit={handleSubmit}>
-            <div className='flex text-white flex-col items-center justify-between  pt-3 w-96 rounded-2xl h-[470px] bg-[#171717]'>
-                <div className='flex flex-col gap-3 mt-3 w-80'>
+            <div className='flex text-white flex-col items-center justify-between w-screen h-screen  pt-3 md:w-96 rounded-2xl md:h-[470px] bg-[#171717]'>
+                <div className='flex flex-col gap-3 mt-20 md:mt-3 w-80'>
                     <h1 className='text-2xl text-center'>Create an account</h1>
                     <hr className=' text-neutral-600' />
 
@@ -59,7 +59,7 @@ const SignUpPage = () => {
                        {error &&  <p className='text-red-500 absolute bottom-62 text-[12px] font-semibold mt-2'>{error}</p>}
                     </div>
 
-                    {isLoading ? <Button label={<AiOutlineLoading3Quarters className="animate-spin mx-auto" />}></Button> : <Button label="Create Account" />}
+                    {isLoading ? <Button label={<AiOutlineLoading3Quarters className="animate-spin mx-auto" />}></Button> : <Button label="Create Account" className="mt-3" />}
                 </div>
                 <div className='flex items-center justify-center bg-neutral-800 p-3 rounded-br-2xl rounded-bl-2xl w-full'>
                     <p className='text-[14px] text-white'>Already have an account? </p>

@@ -23,5 +23,5 @@ export const SidebarItems = [
     icon: <LuSettings2 />,
     label: "Settings",
     rotateItems: ["General", "Team", "Billing"]
-  }
+  },
 ];

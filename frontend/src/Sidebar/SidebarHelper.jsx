@@ -12,7 +12,7 @@ const SideBarHelper = ({insideItems}) => {
                         <div className='flex flex-col w-full justify-center gap-3'>
                             {
                                 item.trim() === ""  ? "" : 
-                                <NavLink to={`/${item}`}>
+                                <NavLink to={`/${item.toLowerCase().replace(/\s+/g, '-')}`}>
                                     <div className=' flex flex-row gap-3 items-center px-3 py-1 transition-all duration-75 ease-in-out cursor-pointer hover:bg-[#262626] rounded-[8px]'>
                                         <span className='text-[14px]'>{item}</span>
                                     </div>

@@ -61,7 +61,7 @@ const Sidebar = ({open, setOpen}) => {
         <div className="flex flex-row items-center gap-3 transition-all ease-in-out duration-300 ">
           <div
             className={`${
-              open ? "w-[30px] ml-1 h-[30px] hover:bg-sky-500 bg-sky-400" : "bg-transparent ml-3"
+              open ? "w-[30px] ml-1 h-[30px] hover:bg-neutral-300 bg-white text-black" : "bg-transparent ml-3"
             } transition-all ease-in-out duration-100 flex items-center justify-center rounded-[10px] cursor-pointer`}
           >
             {open ? (

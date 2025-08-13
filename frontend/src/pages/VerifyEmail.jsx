@@ -10,7 +10,7 @@ const VerifyEmail = () => {
     const inputRefs = useRef([])
     const navigate = useNavigate()
 
-    const {error, verifyEmail} = useAuthStore();
+    const {error, verifyEmail, checkAuth} = useAuthStore();
 
     const handleChange = (index, value) => {
         const newCode = [...code]
@@ -49,6 +49,7 @@ const VerifyEmail = () => {
 
         try {
             await verifyEmail(verificationCode)
+            await checkAuth()
             navigate("/")
             toast.success("Email verified successfully")
         } catch (error) {
