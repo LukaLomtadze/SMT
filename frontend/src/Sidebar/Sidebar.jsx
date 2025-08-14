@@ -52,7 +52,7 @@ const Sidebar = ({open, setOpen}) => {
       {/* Sidebar */}
       <div
         className={`${
-          open ? "w-[260px] p-5 gap-[40px]" : "w-[50px]"
+          open ? "w-[260px] p-3 gap-[40px]" : "w-[50px]"
         } fixed top-0 left-0 z-50 transition-all justify-between ease-in-out flex flex-col h-screen text-white text-[20px] gap-5 p-2 bg-[#171717] pt-5`}
         ref={sidebarRef}
       >

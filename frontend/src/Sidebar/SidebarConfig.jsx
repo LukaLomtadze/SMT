@@ -7,21 +7,25 @@ export const SidebarItems = [
   {
     icon: <MdTerminal />,
     label: "Playground",
-    rotateItems: ["History", "Starred", "MetroMan"]
+    rotateItems: ["History", "Starred", "MetroMan"],
+    
   },
   {
     icon: <IoLogoBuffer />,
     label: "Models",
-    rotateItems: ["Genesis", "Explorer", "Quantum"]
+    rotateItems: ["Genesis", "Explorer", "Quantum"],
+    
   },
   {
     icon: <IoBookOutline />,
     label: "Documentation",
-    rotateItems: ["Introduction", "Get Started", "Tutorials"]
+    rotateItems: ["Introduction", "Get Started", "Tutorials"],
+    
   },
   {
     icon: <LuSettings2 />,
     label: "Settings",
-    rotateItems: ["General", "Team", "Billing"]
+    rotateItems: ["Account Settings", "General Settings", "Control Panel"],
+    
   },
 ];

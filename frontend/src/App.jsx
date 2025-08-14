@@ -14,6 +14,7 @@ import LogOutNotifier from "./Sidebar/LogOutNotifier"
 import ResetPassword from "./pages/ResetPassword"
 import ForgotPassword from "./pages/ForgotPassword"
 import Profile from "./pages/Profile"
+import AccountSettingsPage from "./pages/AccountSettingsPage"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
 const ProtectRoute = ({ children }) => {
@@ -73,7 +74,7 @@ function App() {
   useEffect(() => {
     const hideOnPaths = ["/verify-email", "/signup", "/login"];
     setShowSidebar(isAuthenticated && !hideOnPaths.includes(location.pathname));
-  }, [location.pathname, isAuthenticated]); // now it will update on route change
+  }, [location.pathname, isAuthenticated]); 
 
   useEffect(() => {
     checkAuth();
@@ -101,7 +102,7 @@ function App() {
   const{isOpen} = useSidebarStore()
 
   return (
-    <div className="min-h-screen bg-[#212121]">
+    <div className="min-h-screen bg-[#212121] overflow-y-auto overflow-x-hidden">
       {showSidebar && <Sidebar open={open} setOpen={setOpen} />
       }
       <Routes>
@@ -136,6 +137,15 @@ function App() {
             <RedirectAuthenticatedUser>
               <LogInPage />
             </RedirectAuthenticatedUser>
+          }
+        ></Route>
+
+        <Route
+          path="/account-settings"
+          element={
+            <ProtectRoute>
+              <AccountSettingsPage open={open} />
+            </ProtectRoute>
           }
         ></Route>
 

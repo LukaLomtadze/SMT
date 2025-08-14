@@ -5,7 +5,7 @@ const API_URL = "http://localhost:4040/api/auth";
 
 axios.defaults.withCredentials = true; 
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
     user: null,
     isAuthenticated: false,
     error: null,
@@ -84,7 +84,77 @@ export const useAuthStore = create((set) => ({
             const response = await axios.put(`${API_URL}/updatepassword`, {password})
             set({isLoading: false, message: response.data.message})
         }catch(err){
-            set({isLoading: false, errorMonitor: err.response.message || "Error updating password"})
+            set({isLoading: false, error: err.response.message || "Error updating password"})
+            throw err;
+        }
+    },
+
+    updateName: async (name) => {
+        set({ isLoading: true, error: null });
+        try {
+            const response = await axios.put(`${API_URL}/updateUserName`, { newName: name });
+            set((state) => ({
+                isLoading: false,
+                message: response.data.message,
+                user: { ...state.user, name: response.data.user.name }
+            }));
+        } catch (error) {
+            set({
+                isLoading: false,
+                error: error.response?.data?.message || "Error updating name"
+            });
+            throw error;
+        }
+    },
+
+    followUser: async (id) => {
+        try {
+            const res = await axios.post(
+                `http://localhost:4040/api/auth/follow/${id}`,
+                {}, // no body needed
+                { withCredentials: true }
+            );
+
+            // Optionally update local user state if this is the current user
+            const { user } = get();
+            if (user && user._id !== id) {
+                set({
+                    user: {
+                        ...user,
+                        following: [...(user.following || []), id]
+                    }
+                });
+            }
+
+            return res.data;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    },
+
+    unFollowUser: async (id) => {
+        try {
+            const res = await axios.post(
+                `http://localhost:4040/api/auth/unfollow/${id}`,
+                {},
+                { withCredentials: true }
+            );
+
+            // Optionally update local user state if this is the current user
+            const { user } = get();
+            if (user && user._id !== id) {
+                set({
+                    user: {
+                        ...user,
+                        following: (user.following || []).filter(uid => uid !== id)
+                    }
+                });
+            }
+
+            return res.data;
+        } catch (err) {
+            console.error(err);
             throw err;
         }
     },

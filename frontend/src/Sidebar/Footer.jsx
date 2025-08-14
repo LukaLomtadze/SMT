@@ -5,7 +5,7 @@ import DropDown from './DropDown';
 import { useAuthStore } from '../stateManagment/authStore';
 import { useProfileStore } from '../stateManagment/profileStore';
 import { MdVerified } from 'react-icons/md';
-
+import Image from '../components/Image';
 const Footer = ({visible}) => {
 
 
@@ -51,19 +51,12 @@ const Footer = ({visible}) => {
         onClick={visible ? openDropDown : undefined}
     >
         
-        <img className={` transition-all duration-300 ease-in-out cursor-pointer ${visible ? "w-[40px] h-[40px] rounded-2xl" : "w-[35px] h-[35px]"} rounded-full`} src={defaultPic}
-            onClick={(e) => {
-                if(!visible){
-                    openDropDown(); 
-                    e.stopPropagation()
-                }
-            }}
-         />
+        <Image visible={visible} openDropDown={openDropDown} />
         
        {visible && (
         <div className='flex flex-row justify-between w-[250px] items-center'>
             <div className='flex flex-col'>
-                <div className='-mt-2 flex flex-row items-center gap-1'><span className='text-white text-[12px]'>{name}</span><MdVerified className='text-sky-400 text-sm' /></div>
+                <div className='-mt-1 flex flex-row items-center gap-1'><span className='text-white text-[12px]'>{name}</span><MdVerified className='text-sky-400 text-sm' /></div>
                 <span className='text-white text-[10px]'>{email}</span>
             </div>
             <RiExpandUpDownLine />

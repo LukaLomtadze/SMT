@@ -3,9 +3,14 @@ import { useProfileStore } from '../stateManagment/profileStore'
 import { FaHeart } from "react-icons/fa6";
 import { BsFillCollectionFill } from "react-icons/bs";
 import { useAuthStore } from '../stateManagment/authStore';
-import { useParams } from 'react-router-dom';
+import { useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { MdVerified } from "react-icons/md";
+import FollowButton from '../components/FollowButton';
+import { BiRepost } from "react-icons/bi";
+import { useProfileRouterStore } from '../stateManagment/profileRouter';
+import ProfileStatePage from './ProfileStatePage';
+
 
 const Profile = ({open}) => {
 
@@ -14,72 +19,83 @@ const Profile = ({open}) => {
 
     const items = [
         {label: "Posts", icon: <BsFillCollectionFill />},
-        {label: "Liked", icon: <FaHeart />}
+        {label: "Liked", icon: <FaHeart />},
+        {label: "Reposts", icon: <BiRepost />}
     ]
 
     const{defaultPic} = useProfileStore()
 
-    const {id} = useParams()
+    const {id, id: personalId} = useParams()
 
     const {user} = useAuthStore()
 
     const [profileData, setProfileData] = useState(null)
 
+    const isOwner = user?._id === personalId;
+
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await axios.get(`${API_URL}/user/${id}`, {withCredentials: true})
-                setProfileData(response.data)
+                const response = await axios.get(`${API_URL}/user/${id}`, { withCredentials: true });
+                setProfileData(response.data);
             } catch (error) {
-                console.log(error)
+                console.log(error);
             }
-        }
+        };
+    
+        fetchProfile();
+    }, [id]);
 
-        if(user?._id === id){
-            setProfileData(user)
-        }
-        else{
-            fetchProfile()
-        }
-    }, [id, user])
+    const {updateProfileState} = useProfileRouterStore()
+    
 
   return (
-    <div className={`${open ? "ml-[270px] w-[85vw] h-screen" : "ml-[60px] w-[95vw] h-screen"} transition-all ease-in-out duration-100 absolute top-0`}>
-        <div className='w-full h-full m-4'>
-            <div className='mt-10 ml-4 flex flex-row gap-5'>
+    <div className={`${open ? "ml-[270px]" : "md:ml-[60px] ml-5"} transition-all ease-in-out duration-100 `}>
+        <div className={`w-full h-full ${!open ? "-mt-8 " : ""}`}>
+            <div className='mt-10 md:ml-4 ml-0 flex flex-col items-center mb-3 md:flex-row gap-5'>
                 <div>
-                    <img  src={defaultPic} className='w-32 h-32 rounded-full' />
+                    <img  src={defaultPic} className='md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 rounded-full' />
                 </div>
-                <div className='flex-col flex h-32 justify-between'>
-                <div className='text-white mt-2 w-full'>
-                    <div className='flex flex-row items-center w-full gap-2'><p className='text-xl'>{profileData?.name}</p><MdVerified className='text-sky-400' /></div>
-                    <p className='text-sm text-neutral-400'>{profileData?.email}</p>
+                <div className='flex-col flex h-12 md:h-32 justify-between'>
+                <div className='text-white mt-2 w-full flex flex-col'>
+                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name}</p><MdVerified className='text-sky-400' /></div>
+                    <p className='text-sm text-neutral-400'>{isOwner ? profileData?.email : <></>}</p>
+
+                    <div className='text-white flex flex-row md:gap-4 gap-2 mt-2'>
+                        <p className='text-sm md:text-lg '>{profileData?.followersCount} Followers</p>
+                        <p className='text-sm md:text-lg '>{profileData?.followingCount} Following</p>
+                    </div>
                 </div>
 
-                <div className='mb-2'>
-                    {user?._id === id && <button className='bg-white text-neutral-900 w-full h-8 rounded-sm cursor-pointer hover:bg-neutral-200 transition-all ease-in-out duration-75'>Edit Profile</button>}
+                <div className='mb-2 mt-1'>
+                    {user?._id === id ? <NavLink to={`/account-settings`}><button className='bg-white text-neutral-900 md:w-48 w-[148px] h-8 rounded-sm cursor-pointer hover:bg-neutral-200 transition-all ease-in-out duration-75'>Edit Profile</button></NavLink> : <FollowButton   profileId={id}
+                                    profileData={profileData} 
+                                    setProfileData={setProfileData}  />}
                 </div>
                 </div>
             </div>
 
-            <hr className={`${open ? "w-[85%]" : "w-[80%] md:w-[90%]"}  text-neutral-500 mt-12`} />
+            <hr className={`${open ? "w-[85%]" : "w-[80%] md:w-[90%]"} ml-12 md:ml-0  text-neutral-500 md:mt-12 mt-20`} />
 
-            <div className='text-white flex flex-row gap-3 mt-5'>
-                {
-                    items.map((item, i) => {
-                        return(
-                            <div key={i} className='text-white cursor-pointer rounded-xl flex items-center flex-row text-lg'>
-                                <div className='h-[50px] mr-2 w-[1px] bg-neutral-500'></div>
-                                <div className='hover:bg-neutral-700 rounded-sm flex flex-row items-center px-3'>
-                                    <div>{item.icon}</div>
-                                    <p className='rotate-90 text-transparent'>{"...."}</p>
-                                    <p>{item.label}</p>
-                                </div>
-                            </div>
-                        )
-                    })
-                }
-            </div>
+            <div className="text-white flex flex-wrap gap-4 mt-5 md:ml-1 ml-0 md:justify-start justify-center">
+  {items.map((item, i) => (
+    <div
+      key={i}
+      className="cursor-pointer rounded-xl flex flex-col justify-center flex-[1_1_100px] sm:flex-[0_1_auto] min-w-[90px] max-w-[140px]"
+    >
+      <div
+        onClick={() => updateProfileState(item.label.toLowerCase())}
+        className="hover:bg-neutral-700 active:hover:bg-neutral-600 rounded-sm flex flex-row items-center px-3 py-1"
+      >
+        <div className="shrink-0">{item.icon}</div>
+        <p className="mx-2">{item.label}</p>
+      </div>
+      <div className="w-full h-[1px] bg-neutral-500 mt-3"></div>
+    </div>
+  ))}
+</div>
+
+            <ProfileStatePage open={open} />
         </div>
     </div>
   )

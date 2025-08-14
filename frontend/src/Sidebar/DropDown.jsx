@@ -45,7 +45,7 @@ const DropDown = forwardRef(({ email, name, image, isVisible ,opened, setOpen },
             {
                 items.map((item, i) => {
                     return(
-                        <div key={i}>
+                        <div key={i} onClick={() => {setOpen(false)}}>
                             <NavLink to={`${i == 0 ? `/${item.label.toLowerCase()}/${user?._id}` : `/${item.label}`} `}>
                             <div className='flex flex-row gap-2 items-center p-3 hover:bg-[#333232] rounded-[10px] w-[230px] h-[40px]'>
                                 <div className='text-[18px] text-gray-300'>{item.icon}</div>
