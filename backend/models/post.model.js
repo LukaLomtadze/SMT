@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 
 const postSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    trim: true,
-    maxlength: 200
-  },
   content: {
     type: String,
     required: true,
@@ -14,7 +9,7 @@ const postSchema = new mongoose.Schema({
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: false
   },
   images: [
     {

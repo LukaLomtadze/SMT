@@ -28,6 +28,6 @@ app.listen(port, async () => {
     console.log(`server started on localhost:${port}`)
 })
 
-//jdC8ZF133aHm6xsI
+//ekxnv0Sl9uLVq0qF
 
-//mongodb+srv://nopev16:jdC8ZF133aHm6xsI@cluster0.jvux4zn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+//mongodb+srv://dbmongo79:ekxnv0Sl9uLVq0qF@cluster0.mqmrlvb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

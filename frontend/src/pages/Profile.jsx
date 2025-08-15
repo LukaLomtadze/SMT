@@ -61,8 +61,8 @@ const Profile = ({open}) => {
                     <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name || user?.name}</p><MdVerified className='text-sky-400' /></div>
                     <p className='text-sm text-neutral-400'>{isOwner ? user?.email : <></>}</p>
                     <div className='text-white flex flex-row md:gap-4 gap-2 mt-2'>
-                        <p className='text-sm md:text-lg '>{profileData?.followersCount || user?.followersCount} Followers</p>
-                        <p className='text-sm md:text-lg '>{profileData?.followingCount} Following</p>
+                        <p className='text-sm md:text-lg '>{profileData?.followersCount || 0} Followers</p>
+                        <p className='text-sm md:text-lg '>{profileData?.followingCount || 0} Following</p>
                     </div>
                 </div>
 

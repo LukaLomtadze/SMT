@@ -37,7 +37,7 @@ const SettingsThing = ({editName, user, fieldKey,ChangeWhat,setEditName, handleF
                 <p>{type}:</p>
                 <input
                     value={ChangeWhat}
-                    onChange={(e) => setName(e.target.value.replace(/\s/g, "_"))}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder={user?.[fieldKey] || "PassWord"}
                     onKeyDown={handleKeyDown}
                     maxLength={20}
@@ -190,7 +190,6 @@ const AccountSettingsPage = ({ open }) => {
         month: "numeric",
         hour: "2-digit",
         minute: "2-digit",
-        hour12: true,
     })
 
     const [image, setImage] = useState(user?.image)
@@ -258,11 +257,17 @@ const AccountSettingsPage = ({ open }) => {
                             <SettingsThing type={"Password"} fieldKey={"password"} ChangeWhat={password} editName={editPass} setEditName={setEditPass} user={user} setName={setPassword} />
                         }
                     </div>
-
+                    <div className='w-full h-[1px] bg-neutral-600'></div>
+                        
+                    <h1>Account Details:</h1>
                     <div className='flex flex-col gap-2 text-neutral-300'>
+                        <p>Account Status: {!user?.isVerfied ? "Verified" : "Not Verified"}</p>
+                        <p className=''>Account Id: {user?._id}</p>
                         <p className=''>Account Created at: {formatDate1}</p>
                         <p className=''>Account Updated at: {formatDate2.toUpperCase()}</p>
                     </div>
+
+                    <div className='w-full h-[1px] bg-neutral-600'></div>
                 </div>
             </div>
         </div>
