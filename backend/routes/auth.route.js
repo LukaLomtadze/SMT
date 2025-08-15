@@ -1,5 +1,5 @@
 import express from "express";
-import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers } from "../controllers/auth.controller.js";
+import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, unFollowUser } from "../controllers/followers.controller.js";
 
@@ -19,9 +19,10 @@ router.post("/reset-password/:token", resetPassword)
 
 router.put("/updatepassword", verifyToken, updatePassword)
 router.put("/updateUserName", verifyToken, updateUserName);
+router.put("/updateImage", verifyToken, updateImage)
 
 router.get("/user/:id", verifyToken, getUsers)
-router.get("/users/:id", findUsers)
+router.get("/users/:id" ,findUsers)
 
 router.post("/follow/:id", verifyToken, followUser);
 router.post("/unfollow/:id", verifyToken, unFollowUser);

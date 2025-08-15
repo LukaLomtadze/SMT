@@ -40,8 +40,8 @@ export const followUser = async (req, res) => {
 
 export const unFollowUser = async (req, res) => {
     try {
-        const { id } = req.params; // the user to unfollow
-        const currentUserId = req.userId; // from verifyToken middleware
+        const { id } = req.params;
+        const currentUserId = req.userId; 
 
         if (id === currentUserId) {
             return res.status(400).json({ message: "You cannot unfollow yourself" });

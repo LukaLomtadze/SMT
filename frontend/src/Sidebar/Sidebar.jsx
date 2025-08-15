@@ -49,7 +49,6 @@ const Sidebar = ({open, setOpen}) => {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <div
         className={`${
           open ? "w-[260px] p-3 gap-[40px]" : "w-[50px]"
@@ -76,7 +75,9 @@ const Sidebar = ({open, setOpen}) => {
           <span className="text-[18px]">{open ? "SideBar.jsx" : ""}</span>
         </div>
 
-        {/* Sidebar Items */}
+
+
+        {/* Sidebar itess */}
         <div className={`flex flex-col gap-3 h-[60vh] md:h-[70vh] scrollbar-dark overflow-auto ${open ? "mt-5" : ""}`}>
           <span className={`${open ? "text-[14px] text-gray-400" : "hidden"}`}>
             Platform

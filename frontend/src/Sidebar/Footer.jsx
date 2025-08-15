@@ -3,7 +3,6 @@ import { RiExpandUpDownLine } from "react-icons/ri";
 import { useState, useRef, useEffect } from 'react';
 import DropDown from './DropDown';
 import { useAuthStore } from '../stateManagment/authStore';
-import { useProfileStore } from '../stateManagment/profileStore';
 import { MdVerified } from 'react-icons/md';
 import Image from '../components/Image';
 const Footer = ({visible}) => {
@@ -34,7 +33,6 @@ const Footer = ({visible}) => {
 
     const {user} = useAuthStore()
 
-    const {defaultPic} = useProfileStore()
 
     if(!user){
         return null
@@ -56,7 +54,9 @@ const Footer = ({visible}) => {
        {visible && (
         <div className='flex flex-row justify-between w-[250px] items-center'>
             <div className='flex flex-col'>
-                <div className='-mt-1 flex flex-row items-center gap-1'><span className='text-white text-[12px]'>{name}</span><MdVerified className='text-sky-400 text-sm' /></div>
+                <div className='-mt-1 flex flex-row  items-center gap-1'>
+                    <span className='text-white text-[12px] flex flex-wrap items-center'>{name}<MdVerified className='text-sky-400 text-sm' /></span>
+                    </div>
                 <span className='text-white text-[10px]'>{email}</span>
             </div>
             <RiExpandUpDownLine />
@@ -65,7 +65,7 @@ const Footer = ({visible}) => {
             
     </div>
 
-    <DropDown ref={dropDownRef} opened={open} setOpen={setOpen} isVisible={visible} image={defaultPic} name={name} email={email} />
+    <DropDown ref={dropDownRef} opened={open} setOpen={setOpen} isVisible={visible} name={name} email={email} />
     </div>
   )
 }

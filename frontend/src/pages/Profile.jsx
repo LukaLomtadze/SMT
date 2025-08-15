@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useProfileStore } from '../stateManagment/profileStore'
 import { FaHeart } from "react-icons/fa6";
 import { BsFillCollectionFill } from "react-icons/bs";
 import { useAuthStore } from '../stateManagment/authStore';
@@ -10,6 +9,7 @@ import FollowButton from '../components/FollowButton';
 import { BiRepost } from "react-icons/bi";
 import { useProfileRouterStore } from '../stateManagment/profileRouter';
 import ProfileStatePage from './ProfileStatePage';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 
 const Profile = ({open}) => {
@@ -22,8 +22,6 @@ const Profile = ({open}) => {
         {label: "Liked", icon: <FaHeart />},
         {label: "Reposts", icon: <BiRepost />}
     ]
-
-    const{defaultPic} = useProfileStore()
 
     const {id, id: personalId} = useParams()
 
@@ -47,22 +45,23 @@ const Profile = ({open}) => {
     }, [id]);
 
     const {updateProfileState} = useProfileRouterStore()
+
+    const isSmall = window.innerWidth <= 768;
     
 
   return (
-    <div className={`${open ? "ml-[270px]" : "md:ml-[60px] ml-5"} transition-all ease-in-out duration-100 `}>
+    <div className={`${open ? "ml-[270px] py-5 px-0" : "md:ml-[80px] ml-5"} h-screen transition-all ease-in-out duration-100 `}>
         <div className={`w-full h-full ${!open ? "-mt-8 " : ""}`}>
             <div className='mt-10 md:ml-4 ml-0 flex flex-col items-center mb-3 md:flex-row gap-5'>
                 <div>
-                    <img  src={defaultPic} className='md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 rounded-full' />
+                   <img  src={profileData?.image || user?.image} className='md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 object-cover rounded-full' />
                 </div>
                 <div className='flex-col flex h-12 md:h-32 justify-between'>
                 <div className='text-white mt-2 w-full flex flex-col'>
-                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name}</p><MdVerified className='text-sky-400' /></div>
-                    <p className='text-sm text-neutral-400'>{isOwner ? profileData?.email : <></>}</p>
-
+                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name || user?.name}</p><MdVerified className='text-sky-400' /></div>
+                    <p className='text-sm text-neutral-400'>{isOwner ? user?.email : <></>}</p>
                     <div className='text-white flex flex-row md:gap-4 gap-2 mt-2'>
-                        <p className='text-sm md:text-lg '>{profileData?.followersCount} Followers</p>
+                        <p className='text-sm md:text-lg '>{profileData?.followersCount || user?.followersCount} Followers</p>
                         <p className='text-sm md:text-lg '>{profileData?.followingCount} Following</p>
                     </div>
                 </div>
@@ -81,14 +80,14 @@ const Profile = ({open}) => {
   {items.map((item, i) => (
     <div
       key={i}
-      className="cursor-pointer rounded-xl flex flex-col justify-center flex-[1_1_100px] sm:flex-[0_1_auto] min-w-[90px] max-w-[140px]"
+      className="cursor-pointer rounded-xl flex flex-col justify-center flex-[1_1_100px] sm:flex-[0_1_auto] min-w-[50px] max-w-[90px] items-center"
     >
       <div
         onClick={() => updateProfileState(item.label.toLowerCase())}
-        className="hover:bg-neutral-700 active:hover:bg-neutral-600 rounded-sm flex flex-row items-center px-3 py-1"
+        className="hover:bg-neutral-700 active:hover:bg-neutral-600 rounded-sm flex flex-row items-center px-1 py-1"
       >
-        <div className="shrink-0">{item.icon}</div>
-        <p className="mx-2">{item.label}</p>
+        <div className={`shrink-0 ${isSmall ? "text-2xl" : ""}`}>{item.icon}</div>
+        {!isSmall && <p className="mx-2">{item.label}</p>}
       </div>
       <div className="w-full h-[1px] bg-neutral-500 mt-3"></div>
     </div>

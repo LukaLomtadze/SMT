@@ -8,7 +8,7 @@ import { useAuthStore } from '../stateManagment/authStore';
 
 const ResuableNocontent = ({icon:Icon, label, pg}) => {
     return(
-        <div className={`${open ? "px-8 w-[90%]" : "w-full"} max-w-[1200px] mt-20 flex flex-col h-full items-center text-center`}>
+        <div className={`${open ? "px-8" : ""} max-w-screen mt-20 flex flex-col h-full items-center justify-center text-center`}>
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-26 md:h-26 rounded-full mb-3 bg-neutral-700 flex items-center justify-center">
                 <Icon className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 text-white" />
             </div>
@@ -42,7 +42,7 @@ const ProfileStatePage = () => {
             }</>
         )}
         {initialState === "reposts" && (
-            reposts === null ? <ResuableNocontent icon={FaFrownOpen} label={"No Reposted Posts"} pg={isOwner ? "You haven't reposted any videos yet" : "This user hasn't reposted any posts"} /> : "Reposts"
+            reposts === null ? <ResuableNocontent icon={FaFrownOpen} label={"No Reposted Posts"} pg={isOwner ? "You haven't reposted any posts yet" : "This user hasn't reposted any posts"} /> : "Reposts"
         )}
     </div>
   )

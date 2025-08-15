@@ -43,7 +43,7 @@ const SignUpPage = () => {
                     <div className='mt-5 flex flex-col'>
                         <div>
                             <label htmlFor='name' className='text-[13px]'>Name</label>
-                            <Input value={name} onChange={(e) => setName(e.target.value)} isPassword={false} icon={IoPerson} name="name" required placeholder="Full Name" type="text" />
+                            <Input maxLength={20} value={name}  onChange={(e) => setName(e.target.value)} isPassword={false} icon={IoPerson} name="name" required placeholder="Full Name" type="text" />
                         </div>
 
                        <div>

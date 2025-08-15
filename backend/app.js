@@ -15,7 +15,8 @@ app.use(cors({
 }));
 
 
-app.use(express.json());//allows us to parse incoming requests with JSON payloads requests:req.body
+app.use(express.json({limit: "10mb"}));//allows us to parse incoming requests with JSON payloads requests:req.body
+app.use(express.urlencoded({limit: "10mb" , extended: true}))
 app.use(cookieParser()) // allows us to parse incoming cookies
 
 app.use("/api/auth", authRoutes)

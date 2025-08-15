@@ -11,6 +11,7 @@ export const useAuthStore = create((set, get) => ({
     error: null,
     isLoading: false,
     isCheckingAuth: true,
+    isLoadingImage: false,
 
     signup: async (email, password, name) => {
 		set({ isLoading: true, error: null });
@@ -78,10 +79,10 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
-    updatePassword: async(password) => {
+    updatePassword: async(oldPassword, newPassword) => {
         set({isLoading: true, error: null});
         try{
-            const response = await axios.put(`${API_URL}/updatepassword`, {password})
+            const response = await axios.put(`${API_URL}/updatepassword`, {oldPassword, newPassword})
             set({isLoading: false, message: response.data.message})
         }catch(err){
             set({isLoading: false, error: err.response.message || "Error updating password"})
@@ -103,6 +104,20 @@ export const useAuthStore = create((set, get) => ({
                 isLoading: false,
                 error: error.response?.data?.message || "Error updating name"
             });
+            throw error;
+        }
+    },
+
+    updateImage: async(image) => {
+        set({isLoadingImage: true, error: null});
+        try {
+            const response = await axios.put(`${API_URL}/updateImage`,  {image})
+            set((state) => ({
+                isLoadingImage:false,
+                user: {...state.user, image: response.data.user.image}
+            }))
+        } catch (error) {
+            set({isLoadingImage:false, error: error.reponse?.data?.message || "Error updating picture"})
             throw error;
         }
     },

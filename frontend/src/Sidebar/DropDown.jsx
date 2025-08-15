@@ -11,7 +11,7 @@ import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../stateManagment/authStore';
 import { MdVerified } from 'react-icons/md';
 
-const DropDown = forwardRef(({ email, name, image, isVisible ,opened, setOpen }, ref) => {
+const DropDown = forwardRef(({ email, name, isVisible ,opened, setOpen }, ref) => {
 
     const items = [
         {icon: <RiVerifiedBadgeLine />, label: "Account"},
@@ -26,12 +26,16 @@ const DropDown = forwardRef(({ email, name, image, isVisible ,opened, setOpen },
     <div className={`${opened ? "" : "hidden"} transition-all duration-300 ease-in-out absolute bg-[#262626] w-[250px] h-[305px] ${isVisible ? "md:left-[230px] bottom-[70px] md:bottom-[50px] sm:left-[105px]" : "left-[55px] bottom-5"} flex flex-col border-1 border-[#3c3c3c] rounded-2xl`}
         ref={ref}
     >
-        <div className='flex flex-row w-[248px] items-center p-3 h-[60px] gap-2 border-1 border-b-[#3c3c3c] border-t-0 border-l-0 border-r-0'>
-            <img src={image} className='w-[40px] h-[40px] rounded-full' />
+        <div className='flex flex-row w-[248px] items-center p-3 py-5 h-[60px] gap-2 border-1 border-b-[#3c3c3c] border-t-0 border-l-0 border-r-0'>
+            <img src={user?.image} className='w-[40px] h-[40px] rounded-full object-cover' />
             <div className='flex flex-col'>
-                <div className='flex flex-row items-center gap-1'>
-                    <span className='text-[16px]'>{name}</span><MdVerified className='text-sky-400 text-xl' />
-                </div>
+            <div className="flex flex-row text-sm flex-wrap items-center gap-1 max-w-[150px]">
+                <span className="flex flex-wrap items-center gap-1 max-w-[150px] break-all whitespace-normal">
+                {name}
+                <MdVerified className="text-sky-400 text-xl flex-shrink-0" />
+                </span>
+            </div>
+
                 <span className='text-[14px]'>{email}</span>
             </div>
         </div>

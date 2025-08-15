@@ -242,16 +242,38 @@ export const updateUserName = async(req, res) => {
     }
 }
 
+export const updateImage = async (req, res) => {
+    try{
+        const user = await User.findById(req.userId)
+        const {image} = req.body;
+
+        if(!image){
+            return res.status(400).json({success: false, message: "You must fill choose image"})
+            
+        }
+
+        user.image = image;
+        await user.save();
+
+        return res.status(200).json({success: true, message: "Image changed succesfully", user})
+    }
+    catch(error){
+        console.error("Error updating password:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+}
+
 export const getUsers = async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
-            .select("name email profilePic followers following"); // include followers & following
+            .select("name email profilePic followers following image"); // include followers/ following
 
         if (!user) return res.status(404).json({ message: "User not found" });
 
         res.json({
             name: user.name,
             email: user.email,
+            image: user.image,
             profilePic: user.profilePic || null,
             followersCount: user.followers.length,
             followingCount: user.following.length,
