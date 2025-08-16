@@ -20,9 +20,6 @@ const HomePage = ({ open }) => {
 
   const {getPosts, isLoading, posts, createPost} = usePostStore()
 
-
-
-
   const API_URL = "http://localhost:4040/api/auth"
 
   useEffect(() => {
@@ -78,6 +75,21 @@ const HomePage = ({ open }) => {
     }
   }, [showPicker])
 
+  const calculateUploadDate = (date) => {
+    const dateNow = Date.now()
+    const diff = dateNow - new Date(date).getTime();
+
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if(seconds < 60) return `${seconds}s`
+    if(minutes < 60) return `${minutes}m`
+    if(hours < 24) return `${hours}h`
+    return `${days}d`
+  }
+
 
 
   return (
@@ -92,9 +104,9 @@ const HomePage = ({ open }) => {
               <p>Following</p>
             </div>
           </div>
-          {image && <div className='md:w-[100vh] w-[60vw] h-[1px] bg-neutral-400'></div>}
           
-          <div className={`flex md:flex-row mt-30 md:mt-3 justify-center items-center ml-5 flex-col  gap-3`}>
+          
+          <div className={`flex md:flex-row md:mt-3 mt-14 justify-center items-center ml-5 flex-col  gap-3`}>
 
             <NavLink to={`${FRONT_URL}${user?._id}`}><img src={user?.image} className='w-10 h-10 md:w-12 md:h-12 rounded-full object-cover cursor-pointer' /></NavLink>
             <div className='w-full flex flex-col relative'>
@@ -102,7 +114,7 @@ const HomePage = ({ open }) => {
                 ref={textareaRef}
                 maxLength={300}
                 placeholder='Whats on your mind?'
-                className={`placeholder:text-neutral-400 border-t-1 border-gray-300 h-20 mb-3 ${image == "" ? "mt-0" : "md:mt-30 sm:mt-0"} w-[90%] outline-0 resize-none text-white`}
+                className={`placeholder:text-neutral-400 border-t-1 pt-5 border-gray-300 h-20 mb-3 ${image == "" ? "mt-0" : "sm:mt-0"} w-[90%] outline-0 resize-none text-white`}
               />
 
                 {image && (
@@ -111,7 +123,7 @@ const HomePage = ({ open }) => {
 
                     <button 
                       onClick={() => setImage("")} 
-                      className='absolute top-25 z-[90] left-26 md:top-54 md:left-26 rounded-full cursor-pointer text-lg flex items-center justify-center bg-black w-5 h-5 text-white'>
+                      className='absolute top-25 z-[90] left-26 md:top-24 md:left-26 rounded-full cursor-pointer text-lg flex items-center justify-center bg-black w-5 h-5 text-white'>
                         <IoMdClose />
                       </button></>
                 )}
@@ -124,7 +136,7 @@ const HomePage = ({ open }) => {
                   <MdEmojiEmotions className='text-white w-5 h-5 cursor-pointer' onClick={() => setShowPicker(!showPicker)} ref={emojiRef} />
                 </div>
 
-                <button className='md:mr-20 mr-0 border-0 bg-neutral-200 cursor-pointer hover:bg-neutral-300 rounded-2xl w-15'>Post</button>
+                <button className='md:mr-20 mr-0 border-0 bg-white cursor-pointer hover:bg-neutral-300 rounded-2xl w-15'>Post</button>
               </div>
 
               {showPicker && (
@@ -146,23 +158,36 @@ const HomePage = ({ open }) => {
               :
               posts.map((item, i) => {
                 return(
-                  <div key={i} className='p-5 border-t-1 mt-10 text-white border-neutral-500'>
-                    <div className='flex gap-3 flex-row items-center'>
-                      <NavLink to={`${FRONT_URL}${item.author._id}`}>
+                  <div key={i} className={`p-5 border-1 ${i == 0 ? "mt-15" : ""}  text-white border-neutral-500`}>
+                    <div className='flex md:gap-2 flex-row items'>
+                      <NavLink to={`${FRONT_URL}${item.author._id}`} className={"w-8 h-8 md:w-12 md:h-12"}>
                         <img 
                           src={item.author.image} 
-                          className='w-10 h-10 md:w-12 md:h-12 rounded-full'/>
+                          className='w-8 h-8 md:w-12 md:h-12 rounded-full'/>
                       </NavLink>
 
                       <NavLink to={`${FRONT_URL}${item.author._id}`}>
-                        <p 
-                          className='flex gap-2 hover:underline cursor-pointer flex-row items-center'>
-                          {item.author.name}
-                          <MdVerified  className='text-sky-400' />
-                        </p>
+                          <p 
+                            className='flex gap hover:underline cursor-pointer text-[12px] md:text-[16px] flex-row items-center'>
+                            {item.author.name}
+                            <MdVerified  className='text-sky-400' />
+                          </p>
+                          <div className='flex md:hidden text-[10px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
                       </NavLink>
+                      <div className='hidden md:inline text-[14px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
                     </div>
-                    <p>{item.content}</p>
+                    <div className=''>
+                    <div className=' mx-0 mt-5 md:mt-5 w-full'>
+                      <p className='break-all'>{item.content}</p>
+                    </div>
+                    <div className='flex w-full md:mt-8 mt-3'>
+                      {item.images.map((img, i) => {
+                        return(
+                          <img key={i} src={img} className='w-full border-2 border-neutral-400 shadow-green-500 shadow-2xl h-auto object-cover rounded-lg' />
+                        )
+                      })}
+                    </div>
+                    </div>
                   </div>
                 )
               })

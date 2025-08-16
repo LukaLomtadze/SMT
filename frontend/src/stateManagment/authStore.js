@@ -123,17 +123,19 @@ export const useAuthStore = create((set, get) => ({
     },
 
     followUser: async (id) => {
+        set({isLoading: true,})
         try {
             const res = await axios.post(
                 `http://localhost:4040/api/auth/follow/${id}`,
-                {}, // no body needed
+                {},
                 { withCredentials: true }
             );
 
-            // Optionally update local user state if this is the current user
+            
             const { user } = get();
             if (user && user._id !== id) {
                 set({
+                    isLoading: false,
                     user: {
                         ...user,
                         following: [...(user.following || []), id]
@@ -149,6 +151,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     unFollowUser: async (id) => {
+        set({isLoading: true,})
         try {
             const res = await axios.post(
                 `http://localhost:4040/api/auth/unfollow/${id}`,
@@ -156,10 +159,11 @@ export const useAuthStore = create((set, get) => ({
                 { withCredentials: true }
             );
 
-            // Optionally update local user state if this is the current user
+            
             const { user } = get();
             if (user && user._id !== id) {
                 set({
+                    isLoading: false,
                     user: {
                         ...user,
                         following: (user.following || []).filter(uid => uid !== id)

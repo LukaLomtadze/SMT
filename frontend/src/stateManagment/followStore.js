@@ -2,20 +2,19 @@ import { create } from "zustand";
 import axios from "axios";
 
 export const useFowllowStore = create((set, get) => ({
-    // ... your existing state
+    isLoadingg: false,
 
     followUser: async (id) => {
+        set({isLoadingg: true,})
         try {
             const res = await axios.post(
                 `http://localhost:4040/api/auth/follow/${id}`,
-                {}, // no body needed
+                {},
                 { withCredentials: true }
             );
-
-            // Optionally update local user state if this is the current user
             const { user } = get();
             if (user && user._id !== id) {
-                set({
+                set({isLoadingg: false,
                     user: {
                         ...user,
                         following: [...(user.following || []), id]
@@ -31,6 +30,7 @@ export const useFowllowStore = create((set, get) => ({
     },
 
     unFollowUser: async (id) => {
+        set({isLoadingg: true,})
         try {
             const res = await axios.post(
                 `http://localhost:4040/api/auth/unfollow/${id}`,
@@ -38,10 +38,9 @@ export const useFowllowStore = create((set, get) => ({
                 { withCredentials: true }
             );
 
-            // Optionally update local user state if this is the current user
             const { user } = get();
             if (user && user._id !== id) {
-                set({
+                set({isLoadingg: false,
                     user: {
                         ...user,
                         following: (user.following || []).filter(uid => uid !== id)
