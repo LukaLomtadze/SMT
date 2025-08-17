@@ -7,6 +7,11 @@ import { VscPassFilled } from "react-icons/vsc";
 import { IoMdCloseCircle } from "react-icons/io";
 import Input from '../components/Input';
 import { FaLock } from 'react-icons/fa';
+import Skeleton from '../components/Skeleton';
+import { ImSpinner9 } from "react-icons/im";
+import { PiSpinnerBallFill } from "react-icons/pi";
+import { PiSpinnerBold } from "react-icons/pi";
+
 
 const SettingsThing = ({editName, user, fieldKey,ChangeWhat,setEditName, handleForm, setName, isLoading, type}) => {
 
@@ -221,7 +226,9 @@ const AccountSettingsPage = ({ open }) => {
                 
                 <div className="flex justify-center md:justify-start mt-5">
                     {isLoadingImage ?
-                     <AiOutlineLoading3Quarters className='w-20 h-20 md:w-32 md:h-32 animate-spin mx-auto' /> : 
+                     <Skeleton className={"w-20 h-20 z-10 flex flex-row items-center justify-center md:w-32 rounded-full md:h-32"}>
+                        <PiSpinnerBallFill className='w-14 z-50 h-14 md:w-24 md:h-24  mx-auto animate-[spin_0.4s_linear_infinite] ' />
+                     </Skeleton> : 
                      <><input
                         type='file' 
                         accept='image/*' 

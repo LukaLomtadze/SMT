@@ -27,7 +27,3 @@ app.listen(port, async () => {
     connectDB();
     console.log(`server started on localhost:${port}`)
 })
-
-//ekxnv0Sl9uLVq0qF
-
-//mongodb+srv://dbmongo79:ekxnv0Sl9uLVq0qF@cluster0.mqmrlvb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0

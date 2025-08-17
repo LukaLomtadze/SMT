@@ -8,13 +8,17 @@ export const usePostStore = create((set) => ({
     isLoading: false,
     error: null,
 
-    createPost: async () => {
+    createPost: async (content, images) => {
         set({isLoading: true, error: null})
         try{
-            const response = await axios.post(`${API_URL}/newPost`)
+            const response = await axios.post(`${API_URL}/newPost`, {content, images: images || []}, {withCredentials: true})
+
+            const newPost = response.data.data;
+            if (!newPost) throw new Error("No post returned from backend");
+
             set((state) => ({
                 isLoading: false,
-                posts: [response.data.data, ...state.posts],
+                posts: [newPost, ...state.posts],
                 error: null,
             }))
         }catch(error){
@@ -40,6 +44,24 @@ export const usePostStore = create((set) => ({
                 isLoading: false 
               });
             throw error
+        }
+    },
+    deletePost: async(id) => {
+        set({isLoading: true, error: null})
+
+        try{
+            await axios.delete(`${API_URL}/deletePost/${id}`, {withCredentials: true})
+            set((state) => ({isLoading: false,
+                posts: state.posts.filter(post => post._id !== id),
+                error: null
+            }))
+        }
+        catch(error){
+            set({
+                error: error.response?.data?.message || error.message,
+                isLoading: false,
+              });
+              throw error;
         }
     }
 }))

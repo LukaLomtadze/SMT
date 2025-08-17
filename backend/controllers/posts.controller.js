@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Post from "../models/post.model.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export const getPosts = async (req, res) => {
     try {
@@ -14,25 +15,54 @@ export const getPosts = async (req, res) => {
   };
 
   export const newPost = async (req, res) => {
-    const { content, images } = req.body;
+    const { content, images } = req.body; 
   
-    if (!content) {
+    if (!content && (!images || images.length === 0)) {
       return res.status(400).json({ success: false, message: "Please provide content" });
     }
   
-    const newPost = new Post({
-      content,
-      images,
-      author: req.userId
-    });
-  
     try {
+      const uploadedImages = [];
+      if (images && images.length > 0) {
+        for (let img of images) {
+          const result = await cloudinary.uploader.upload(img, {
+            folder: "posts",
+          });
+          uploadedImages.push(result.secure_url);
+        }
+      }
+  
+      const newPost = new Post({
+        content,
+        images: uploadedImages,
+        author: req.userId,
+      });
+
       await newPost.save();
-      return res.status(201).json({ success: true, data: newPost });
+
+      const populatedData = await newPost.populate("author", "name image")
+  
+      res.status(201).json({ success: true, data: populatedData });
     } catch (error) {
       console.error(error);
-      return res.status(400).json({ success: false, message: "Error creating new post" });
+      res.status(400).json({ success: false, message: "Error creating new post" });
     }
-  };
+};
+
+export const deletePost = async (req, res) => {
+  const {id} = req.params;
+
+  if(!mongoose.Types.ObjectId.isValid(id)){
+    return res.status(404).json({success: false, message: "Post not found"})
+  }
+
+  try{
+    const postToDelete = await Post.findByIdAndDelete(id)
+    return res.status(200).json({success: true, data: postToDelete})
+  }catch(err){
+    console.error(error.message);
+    res.status(500).json({success:false, message: "Server Error"});
+  }
+}
   
 

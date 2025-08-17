@@ -7,7 +7,65 @@ import { IoMdClose } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
 import { usePostStore } from '../stateManagment/postStore';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import ColorThief from 'colorthief';
+import Skeleton from '../components/Skeleton';
+import { GoComment } from "react-icons/go";
+import { IoIosHeart } from "react-icons/io";
+import { IoIosHeartEmpty } from "react-icons/io";
+import { LiaRetweetSolid } from 'react-icons/lia';
+import OpenedImage from './OpenedImage';
+import BigSkeletons from '../components/BigSkeletons';
+import DeleteButton from '../components/MenuButton';
+import { HiDotsVertical } from "react-icons/hi";
+import MenuButton from '../components/MenuButton';
+import toast from 'react-hot-toast';
+import DoubleCheck from '../components/DoubleCheck';
 
+const PostImage = ({src}) => {
+
+  const imageRef = useRef(null)
+  const [borderColor, setBorderColor] = useState("transparent");
+
+  const [openImage, setOpenImage] = useState(false)
+
+  useEffect(() => {
+    const img = imageRef.current;
+    if(!img) return;
+
+
+    const handleLoad = () => {
+      const colorThief = new ColorThief();
+      try {
+        const result = colorThief.getColor(img); 
+        setBorderColor(`rgb(${result[0]}, ${result[1]}, ${result[2]})`);
+      } catch (err) {
+        console.error("ColorThief failed:", err);
+      }
+    };
+
+    img.addEventListener("load", handleLoad);
+    return () => img.removeEventListener("load", handleLoad);
+
+  }, [src])
+
+
+  return(
+    <>
+      <img 
+      ref={imageRef} 
+      src={src} 
+      crossOrigin='anonymous'
+      className={`md:w-[50%] w-full h-auto object-cover rounded-lg cursor-pointer`}
+      onClick={() => setOpenImage(true)}
+      style={{
+        boxShadow: `0 25px 50px rgba(${borderColor.replace("rgb(", "").replace(")", "")}, 0.6)`
+      }}
+    />
+
+    {openImage ? <OpenedImage src={src} setOpenImage={setOpenImage} openImage={openImage} /> : ""}
+    </>
+  )
+}
 
 const HomePage = ({ open }) => {
   const { user } = useAuthStore();
@@ -16,9 +74,22 @@ const HomePage = ({ open }) => {
   const emojiRef = useRef(null)
   const [showPicker, setShowPicker] = useState(false);
 
+  const imageRef = useRef(null)
+
+  useEffect(() => {
+    const img = imageRef.current;
+    if(!img){
+      return;
+    }
+
+
+  })
+
   const FRONT_URL = "http://localhost:5173/account/"
 
-  const {getPosts, isLoading, posts, createPost} = usePostStore()
+  const {getPosts, isLoading, posts, createPost, deletePost} = usePostStore()
+
+  const [isLiked, setIsLiked] = useState({})
 
   const API_URL = "http://localhost:4040/api/auth"
 
@@ -90,11 +161,35 @@ const HomePage = ({ open }) => {
     return `${days}d`
   }
 
+  const handlePostUpload = async() => {
+    const content = textareaRef.current.value.trim();
+    if(!content && !image) return
 
+    try{
+      await createPost(content, image ? [image] : [])
+      textareaRef.current.value = ""
+      setImage("")
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  const handleDelete = async (id) => {
+    try{
+      await deletePost(id)
+      return toast.success("Post Deleted Succesfully")
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  const [isDeleteOption, setIsDeleteOption] = useState(false)
+
+  console.log(isDeleteOption)
 
   return (
     <div className={`${!open ? "-mt-9" : "mt-0"} p-5 w-screen h-screen z-0`}>
-      <div className={`${open ? "ml-72" : "ml-18 md:ml-72"} transition-all ease-in-out duration-100`}>
+      <div className={`${open ? "ml-80" : "ml-18 md:ml-72"} transition-all ease-in-out duration-100`}>
         <div className='flex flex-col justify-center w-[60vw]'>
           <div className='flex flex-row text-white justify-evenly items-center'>
             <div className='hover:bg-neutral-700 px-5 md:px-20 cursor-pointer text-sm md:text-lg py-2 min-w-[50px] flex items-center justify-center md:min-w-[100px] text-center whitespace-nowrap'>
@@ -136,11 +231,17 @@ const HomePage = ({ open }) => {
                   <MdEmojiEmotions className='text-white w-5 h-5 cursor-pointer' onClick={() => setShowPicker(!showPicker)} ref={emojiRef} />
                 </div>
 
-                <button className='md:mr-20 mr-0 border-0 bg-white cursor-pointer hover:bg-neutral-300 rounded-2xl w-15'>Post</button>
+                <button
+                  className='md:mr-20 mr-0 border-0 bg-white cursor-pointer hover:bg-neutral-300 rounded-2xl py-1 w-15'
+                  onClick={handlePostUpload}  
+                  type='submit'
+                >
+                  {isLoading ? <AiOutlineLoading3Quarters className='animate-spin mx-auto'/> : "Post"}
+                </button>
               </div>
 
               {showPicker && (
-                <div className={`${image ? "top-80" : "top-30"} absolute bg-neutral-800 rounded-lg p-2 z-50`}>
+                <div className={`${image ? "top-60" : "top-30"} absolute bg-neutral-800 rounded-lg p-2 z-50`}>
                   <emoji-picker
                     ref={pickerRef}
                     style={{ backgroundColor: "#1f1f1f", color: "white" }}
@@ -152,18 +253,24 @@ const HomePage = ({ open }) => {
             </div>
           </div>
 
-          <div>
+          <div className={`${isLoading ? "" : "flex w-full items-center flex-col"}`}>
             {
-              isLoading ? <><AiOutlineLoading3Quarters className='animate-spin text-4xl absolute top-[50%] left-[50%] mx-auto text-sky-400' /></>
+              isLoading ? <>
+                <BigSkeletons />
+              </>
               :
               posts.map((item, i) => {
+                
                 return(
-                  <div key={i} className={`p-5 border-1 ${i == 0 ? "mt-15" : ""}  text-white border-neutral-500`}>
-                    <div className='flex md:gap-2 flex-row items'>
+                  <div key={i} className={`p-5 border-1 mb-10 ${i == 0 ? "mt-15 rounded-t-2xl" : ""} ${i == posts.length - 1 ? "mb-10 rounded-b-2xl" : ""} w-[90%]  text-white border-neutral-500`}>
+                    <div className='flex gap-2 flex-row justify-between'>
+                      <div className='flex gap-2 flex-row items'>
                       <NavLink to={`${FRONT_URL}${item.author._id}`} className={"w-8 h-8 md:w-12 md:h-12"}>
                         <img 
                           src={item.author.image} 
-                          className='w-8 h-8 md:w-12 md:h-12 rounded-full'/>
+                          className='w-8 h-8 md:w-12 md:h-12 rounded-full'
+                          quality={100}
+                          />
                       </NavLink>
 
                       <NavLink to={`${FRONT_URL}${item.author._id}`}>
@@ -175,18 +282,55 @@ const HomePage = ({ open }) => {
                           <div className='flex md:hidden text-[10px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
                       </NavLink>
                       <div className='hidden md:inline text-[14px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
+                      </div>
+                      {user?._id === item.author?._id ? 
+                          <>
+                            <button 
+                          
+                          onClick={() => handleDelete(item._id)}
+                          className='bg-white h-[50%] px-1 cursor-pointer rounded-lg text-black'>Delete</button>
+                            {/*{isDeleteOption ?
+                              
+                                <DoubleCheck isDeleteOption={setIsDeleteOption} itemId={item._id} handleDelete={handleDelete} />
+                              
+                              :
+                              <></>
+                            }*/}
+                          </>
+                      :
+                        <></>
+                      }
                     </div>
                     <div className=''>
                     <div className=' mx-0 mt-5 md:mt-5 w-full'>
                       <p className='break-all'>{item.content}</p>
                     </div>
-                    <div className='flex w-full md:mt-8 mt-3'>
-                      {item.images.map((img, i) => {
-                        return(
-                          <img key={i} src={img} className='w-full border-2 border-neutral-400 shadow-green-500 shadow-2xl h-auto object-cover rounded-lg' />
-                        )
-                      })}
-                    </div>
+                      <div className='flex w-full justify-center md:mt-8 mt-3'>
+                        {item.images.map((img) => {
+                          return(
+                            <PostImage key={i} src={img} />
+                          )
+                        })}
+                      </div>
+                      
+                      <div className='w-full flex justify-center mt-3'>
+                        
+                        <div className='flex flex-row items-center justify-between  md:w-[40%] w-[80%]'>
+                          <div className='cursor-pointer md:text-lg flex flex-row items-center justify-center hover:bg-sky-900 hover:text-blue-400 rounded-full p-1 text-sm'>
+                            <GoComment />
+                          </div>
+
+                          <div className='cursor-pointer hover:bg-fuchsia-900 flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm hover:text-pink-400'
+                            onClick={() => setIsLiked(prev => ({...prev, [item._id] : !prev[item._id]}))}
+                          >
+                            {!isLiked[item._id] ? (<IoIosHeartEmpty />) : (<IoIosHeart className='text-pink-500'/>)}
+                          </div>
+
+                          <div className='cursor-pointer hover:bg-lime-900 flex flex-row items-center justify-center hover:text-green-400 rounded-full p-1  md:text-lg text-sm'>
+                            <LiaRetweetSolid />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )

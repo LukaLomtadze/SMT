@@ -2,7 +2,7 @@ import express from "express";
 import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, unFollowUser } from "../controllers/followers.controller.js";
-import { newPost, getPosts } from "../controllers/posts.controller.js";
+import { newPost, getPosts, deletePost } from "../controllers/posts.controller.js";
 const router = express.Router();
 
 router.get("/check-auth", verifyToken, checkAuth);
@@ -29,5 +29,7 @@ router.post("/unfollow/:id", verifyToken, unFollowUser);
 
 router.post("/newPost", verifyToken, newPost)
 router.get("/getPosts", verifyToken, getPosts)
+
+router.delete("/deletePost/:id", verifyToken, deletePost)
 
 export default router;
