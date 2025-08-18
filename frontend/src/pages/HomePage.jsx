@@ -194,7 +194,7 @@ const HomePage = ({ open }) => {
   return (
     <div className={`${!open ? "-mt-9" : "mt-0"} p-5 w-screen h-screen z-0`}>
       <div className={`${open ? "ml-80" : "sm:ml-30 ml-12 md:ml-72"} transition-all ease-in-out duration-100`}>
-        <div className='flex flex-col justify-center w-[60vw]'>
+        <div className='flex flex-col justify-center w-[70vw] md:w-[60vw]'>
           <div className='flex flex-row text-white justify-evenly items-center'>
             <div className='hover:bg-neutral-700 px-5 md:px-20 cursor-pointer text-sm md:text-lg py-2 min-w-[50px] flex items-center justify-center md:min-w-[100px] text-center whitespace-nowrap'>
               <p>For You</p>
@@ -266,7 +266,7 @@ const HomePage = ({ open }) => {
               posts.map((item, i) => {
                 
                 return(
-                  <div key={i} className={`p-5 border-1 mb-10 ${i == 0 ? "mt-15 rounded-t-2xl" : ""} ${i == posts.length - 1 ? "mb-10 rounded-b-2xl" : ""} w-[90%]  text-white border-neutral-500`}>
+                  <div key={i} className={`p-5 border-1 mb-10 ${i == 0 ? "mt-15" : ""} rounded-2xl ${i == posts.length - 1 ? "mb-10" : ""} w-[90%]  text-white border-neutral-500`}>
                     <div className='flex gap-2 flex-row justify-between'>
                       <div className='flex gap-2 flex-row items'>
                       <NavLink to={`${FRONT_URL}${item.author._id}`} className={"w-8 h-8 md:w-12 md:h-12"}>
@@ -281,7 +281,7 @@ const HomePage = ({ open }) => {
                           <p 
                             className='flex gap hover:underline cursor-pointer text-[12px] md:text-[16px] flex-row items-center break-words'>
                             {item.author.name}
-                            <MdVerified  className='text-sky-400' />
+                            {item.author?.isAdmin || item.author?.hasBadge ? <MdVerified  className='text-sky-400' /> : <></>}
                           </p>
                           <div className='flex md:hidden text-[10px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
                           
@@ -301,7 +301,7 @@ const HomePage = ({ open }) => {
                       <div className='hidden md:inline text-[14px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
                       
                       </div>
-                      {user?._id === item.author?._id ? 
+                      {user?._id === item.author?._id || user?.isAdmin ? 
                           <>
                             <button 
                           

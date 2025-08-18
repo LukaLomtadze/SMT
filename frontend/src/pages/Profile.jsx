@@ -10,6 +10,7 @@ import { BiRepost } from "react-icons/bi";
 import { useProfileRouterStore } from '../stateManagment/profileRouter';
 import ProfileStatePage from './ProfileStatePage';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import Skeleton from '../components/Skeleton';
 
 
 const Profile = ({open}) => {
@@ -54,12 +55,14 @@ const Profile = ({open}) => {
         <div className={`w-full h-full ${!open ? "-mt-8 " : ""}`}>
             <div className='mt-10 md:ml-4 ml-0 flex flex-col items-center mb-3 md:flex-row gap-5'>
                 <div>
-                   <img  src={profileData?.image || user?.image} className='md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 object-cover rounded-full' />
+                   <img  src={user?.image || profileData?.image} className='md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 object-cover rounded-full' />
                 </div>
                 <div className='flex-col flex h-12 md:h-32 justify-between'>
                 <div className='text-white mt-2 w-full flex flex-col'>
-                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name || user?.name}</p><MdVerified className='text-sky-400' /></div>
-                    <p className='text-sm text-neutral-400'>{isOwner ? user?.email : <></>}</p>
+                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name || <Skeleton className={"w-40 h-7 rounded-2xl"} />}</p>
+                    {profileData?.isAdmin || profileData?.hasBadge ? <MdVerified className='text-sky-400' /> : <></>}
+                    </div>
+                    <p className='text-sm text-neutral-400'>{isOwner ? profileData?.email || <Skeleton className={"rounded-2xl mt-1 w-30 h-4"} /> : <></>}</p>
                     <div className='text-white flex flex-row md:gap-4 gap-2 mt-2'>
                         <p className='text-sm md:text-lg '>{profileData?.followersCount || 0} Followers</p>
                         <p className='text-sm md:text-lg '>{profileData?.followingCount || 0} Following</p>

@@ -32,7 +32,7 @@ const DropDown = forwardRef(({ email, name, isVisible ,opened, setOpen }, ref) =
             <div className="flex flex-row text-sm flex-wrap items-center gap-1 max-w-[150px]">
                 <span className="flex flex-wrap items-center gap-1 max-w-[150px] break-all whitespace-normal">
                 {name}
-                <MdVerified className="text-sky-400 text-xl flex-shrink-0" />
+                {user?.isAdmin || user?.hasBadge ? <MdVerified className="text-sky-400 text-xl flex-shrink-0" /> : <></>}
                 </span>
             </div>
 

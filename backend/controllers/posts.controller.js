@@ -5,7 +5,7 @@ import cloudinary from "../utils/cloudinary.js";
 export const getPosts = async (req, res) => {
     try {
       const posts = await Post.find({})
-        .populate("author", "name image")
+        .populate("author", "name image isAdmin hasBadge")
         .sort({ createdAt: -1 });
   
       return res.status(200).json({ success: true, data: posts });

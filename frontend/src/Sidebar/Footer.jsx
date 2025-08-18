@@ -55,7 +55,7 @@ const Footer = ({visible}) => {
         <div className='flex flex-row justify-between w-[250px] items-center'>
             <div className='flex flex-col'>
                 <div className='-mt-1 flex flex-row  items-center gap-1'>
-                    <span className='text-white text-[12px] flex flex-wrap items-center'>{name}<MdVerified className='text-sky-400 text-sm' /></span>
+                    <span className='text-white text-[12px] flex flex-wrap items-center'>{name}{user?.isAdmin || user?.hasBadge ?<MdVerified className='text-sky-400 text-sm' /> : <></>}</span>
                     </div>
                 <span className='text-white text-[10px]'>{email}</span>
             </div>

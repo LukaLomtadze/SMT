@@ -267,7 +267,7 @@ export const updateImage = async (req, res) => {
 export const getUsers = async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
-            .select("name email profilePic followers following image"); // include followers/ following
+            .select("name email profilePic followers following hasBadge image isAdmin"); // include followers/ following
 
         if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -275,6 +275,8 @@ export const getUsers = async (req, res) => {
             name: user.name,
             email: user.email,
             image: user.image,
+            hasBadge: user.hasBadge,
+            isAdmin: user.isAdmin,
             profilePic: user.profilePic || null,
             followersCount: user.followers.length,
             followingCount: user.following.length,
@@ -320,7 +322,7 @@ export const getAllTheUsers = async (req, res) => {
 export const findUsers = async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
-            .select("name email");
+            .select("name email isAdmin hasBadge");
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });

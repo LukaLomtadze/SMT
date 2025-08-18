@@ -13,6 +13,11 @@ const userSchema = new mongoose.Schema({
         required: false,
         default: false
     },
+    hasBadge: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
     password: {
         type: String,
         required: true,
