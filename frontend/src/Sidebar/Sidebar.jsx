@@ -10,12 +10,13 @@ import SideBarHelper from "./SidebarHelper";
 import Footer from "./Footer";
 import { SidebarItems } from "./SidebarConfig";
 import { NavLink } from "react-router-dom";
+import { useAuthStore } from "../stateManagment/authStore";
 
 const Sidebar = ({open, setOpen}) => {
 
   const [rotatedIndex, setRotatedIndex] = useState(new Set());
 
-
+  const{user} = useAuthStore()
 
   const helper = (index) => {
     if (!open) return;
@@ -74,15 +75,14 @@ const Sidebar = ({open, setOpen}) => {
           </div>
           <span className="text-[18px]">{open ? "SideBar.jsx" : ""}</span>
         </div>
-
-
-
-        {/* Sidebar itess */}
         <div className={`flex flex-col gap-3 h-[60vh] md:h-[70vh] scrollbar-dark overflow-auto ${open ? "mt-5" : ""}`}>
           <span className={`${open ? "text-[14px] text-gray-400" : "hidden"}`}>
             Platform
           </span>
-          {SidebarItems.map((item, i) => (
+          {SidebarItems.filter(item =>{
+            if(item.forAdmin && !user?.isAdmin)return false;
+            return true;}
+          ).map((item, i) => (
             <div key={i} className="flex flex-col justify-between gap-2">
               <div
                 className={`${

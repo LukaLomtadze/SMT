@@ -20,6 +20,9 @@ import { HiDotsVertical } from "react-icons/hi";
 import MenuButton from '../components/MenuButton';
 import toast from 'react-hot-toast';
 import DoubleCheck from '../components/DoubleCheck';
+import { useCommentStore } from '../stateManagment/commentStore';
+import Comments from '../components/Comments';
+import { FaTrash } from "react-icons/fa6";
 
 const PostImage = ({src}) => {
 
@@ -183,13 +186,14 @@ const HomePage = ({ open }) => {
     }
   }
 
-  const [isDeleteOption, setIsDeleteOption] = useState(false)
+  //const [isDeleteOption, setIsDeleteOption] = useState(false)
 
-  console.log(isDeleteOption)
+
+  const {isOpen, toggleOpen} = useCommentStore()
 
   return (
     <div className={`${!open ? "-mt-9" : "mt-0"} p-5 w-screen h-screen z-0`}>
-      <div className={`${open ? "ml-80" : "ml-18 md:ml-72"} transition-all ease-in-out duration-100`}>
+      <div className={`${open ? "ml-80" : "sm:ml-30 ml-12 md:ml-72"} transition-all ease-in-out duration-100`}>
         <div className='flex flex-col justify-center w-[60vw]'>
           <div className='flex flex-row text-white justify-evenly items-center'>
             <div className='hover:bg-neutral-700 px-5 md:px-20 cursor-pointer text-sm md:text-lg py-2 min-w-[50px] flex items-center justify-center md:min-w-[100px] text-center whitespace-nowrap'>
@@ -275,27 +279,37 @@ const HomePage = ({ open }) => {
 
                       <NavLink to={`${FRONT_URL}${item.author._id}`}>
                           <p 
-                            className='flex gap hover:underline cursor-pointer text-[12px] md:text-[16px] flex-row items-center'>
+                            className='flex gap hover:underline cursor-pointer text-[12px] md:text-[16px] flex-row items-center break-words'>
                             {item.author.name}
                             <MdVerified  className='text-sky-400' />
                           </p>
                           <div className='flex md:hidden text-[10px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
+                          
                       </NavLink>
+                      {user?._id === item.author?._id ? 
+                          <>
+                            <button
+                          onDoubleClick={() => handleDelete(item._id)}
+                          className='bg-white md:hidden h-[50%] p-1 cursor-pointer rounded-sm text-black'>
+                            <FaTrash />
+                          </button>
+                            
+                          </>
+                      :
+                        <></>
+                      }
                       <div className='hidden md:inline text-[14px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
+                      
                       </div>
                       {user?._id === item.author?._id ? 
                           <>
                             <button 
                           
                           onClick={() => handleDelete(item._id)}
-                          className='bg-white h-[50%] px-1 cursor-pointer rounded-lg text-black'>Delete</button>
-                            {/*{isDeleteOption ?
-                              
-                                <DoubleCheck isDeleteOption={setIsDeleteOption} itemId={item._id} handleDelete={handleDelete} />
-                              
-                              :
-                              <></>
-                            }*/}
+                          className='bg-white md:block hidden h-[50%] p-1 cursor-pointer rounded-sm text-black'>
+                            <FaTrash />
+                          </button>
+                            
                           </>
                       :
                         <></>
@@ -316,20 +330,22 @@ const HomePage = ({ open }) => {
                       <div className='w-full flex justify-center mt-3'>
                         
                         <div className='flex flex-row items-center justify-between  md:w-[40%] w-[80%]'>
-                          <div className='cursor-pointer md:text-lg flex flex-row items-center justify-center hover:bg-sky-900 hover:text-blue-400 rounded-full p-1 text-sm'>
+                          <div onClick={() => toggleOpen(isOpen)} className='cursor-pointer md:text-lg flex flex-row items-center justify-center hover:bg-sky-900 hover:text-blue-400 rounded-full p-1 text-sm'>
                             <GoComment />
                           </div>
 
                           <div className='cursor-pointer hover:bg-fuchsia-900 flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm hover:text-pink-400'
                             onClick={() => setIsLiked(prev => ({...prev, [item._id] : !prev[item._id]}))}
                           >
-                            {!isLiked[item._id] ? (<IoIosHeartEmpty />) : (<IoIosHeart className='text-pink-500'/>)}
+                            {!isLiked[item._id] ? (<IoIosHeartEmpty />) : (<IoIosHeart className='text-pink-500 shadow-2xl'/>)}
                           </div>
 
                           <div className='cursor-pointer hover:bg-lime-900 flex flex-row items-center justify-center hover:text-green-400 rounded-full p-1  md:text-lg text-sm'>
                             <LiaRetweetSolid />
                           </div>
                         </div>
+
+                        <Comments />
                       </div>
                     </div>
                   </div>

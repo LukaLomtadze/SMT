@@ -66,15 +66,29 @@ const Profile = ({open}) => {
                     </div>
                 </div>
 
-                <div className='mb-2 mt-1'>
-                    {user?._id === id ? <NavLink to={`/account-settings`}><button className='bg-white text-neutral-900 md:w-48 w-[148px] h-8 rounded-sm cursor-pointer hover:bg-neutral-200 transition-all ease-in-out duration-75'>Edit Profile</button></NavLink> : <FollowButton   profileId={id}
+                <div className={`${user?.isAdmin ? "mb-10" : "mb-2"} gap-2 mt-1 flex flex-col`}>
+                    {user?._id === id ? 
+                    <>
+                      <NavLink to={`/account-settings`}>
+                        <button 
+                            className='bg-white text-neutral-900 md:w-48 w-[148px] h-8 rounded-sm   cursor-pointer hover:bg-neutral-200 transition-all ease-in-out duration-75'>
+                          Edit Profile
+                        </button>
+                      </NavLink>
+                    {user?.isAdmin ? 
+                    <NavLink to={`/control-panel`}>
+                          <button className='bg-amber-400/90 text-neutral-900 md:w-48 w-[148px] h-8 rounded-sm cursor-pointer hover:bg-amber-300 transition-all ease-in-out duration-75 '>
+                        AdminPage
+                      </button>
+                    </NavLink> : <></>}
+                    </> : <FollowButton   profileId={id}
                                     profileData={profileData} 
                                     setProfileData={setProfileData}  />}
                 </div>
                 </div>
             </div>
 
-            <hr className={`${open ? "w-[85%]" : "w-[80%] md:w-[90%]"} ml-12 md:ml-0  text-neutral-500 md:mt-12 mt-20`} />
+            <hr className={`${open ? "w-[85%]" : "w-[80%] md:w-[90%]"} ml-12 md:ml-0  text-neutral-500 md:mt-12 ${user?.isAdmin ? "mt-30" : "mt-20"}`} />
 
             <div className="text-white flex flex-wrap gap-4 mt-5 md:ml-1 ml-0 md:justify-start justify-center">
   {items.map((item, i) => (

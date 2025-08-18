@@ -1,5 +1,5 @@
 import express from "express";
-import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage } from "../controllers/auth.controller.js";
+import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage, getAllTheUsers } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, unFollowUser } from "../controllers/followers.controller.js";
 import { newPost, getPosts, deletePost } from "../controllers/posts.controller.js";
@@ -31,5 +31,7 @@ router.post("/newPost", verifyToken, newPost)
 router.get("/getPosts", verifyToken, getPosts)
 
 router.delete("/deletePost/:id", verifyToken, deletePost)
+
+router.get("/getAllUsers", verifyToken, getAllTheUsers)
 
 export default router;

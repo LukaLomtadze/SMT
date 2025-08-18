@@ -15,8 +15,42 @@ import ResetPassword from "./pages/ResetPassword"
 import ForgotPassword from "./pages/ForgotPassword"
 import Profile from "./pages/Profile"
 import AccountSettingsPage from "./pages/AccountSettingsPage"
+import AdminPage from "./pages/AdminPage"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
+
+const ProtectAdmingPage = ({children}) => {
+  const {isAuthenticated, isCheckingAuth, user} = useAuthStore()
+  const location = useLocation()
+
+  if(isCheckingAuth){
+    return (
+      <div className="min-h-screen flex items-center text-3xl justify-center bg-[#212121] text-sky-400">
+        <AiOutlineLoading3Quarters className="animate-spin mx-auto" />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+		if (location.pathname === "/signup") {
+			return <Navigate to="/signup" replace />
+		}
+    else if(location.pathname === "/forgot-password"){
+      return <Navigate to={"/forgot-password"} replace />
+    }
+    else if(location.pathname === "/reset-password/:token"){
+      return <Navigate  to={"/reset-password/:token"} replace/>
+    }
+		return <Navigate to="/login" replace />;
+	}
+
+  if(!user.isAdmin){
+    return <Navigate to={"/"} replace />
+  }
+
+  return children
+}
+
 const ProtectRoute = ({ children }) => {
 	const { isAuthenticated, isCheckingAuth } = useAuthStore();
 	const location = useLocation();
@@ -105,6 +139,7 @@ function App() {
     <div className="min-h-screen bg-[#212121] overflow-y-auto overflow-x-hidden">
       {showSidebar && <Sidebar open={open} setOpen={setOpen} />
       }
+
       <Routes>
         <Route
           path="/"
@@ -114,6 +149,13 @@ function App() {
             </ProtectRoute>
           }
         ></Route>
+
+        <Route path="/control-panel" element={
+          <ProtectAdmingPage>
+            <AdminPage open={open} />
+          </ProtectAdmingPage>
+        }>
+        </Route>
 
         <Route path="/account/:id" element={
           <ProtectRoute>
