@@ -334,6 +334,66 @@ export const findUsers = async (req, res) => {
     }
 }
 
+export const deleteUser = async(req, res) => {
+    const {id} = req.params;
+
+
+    try{     
+        if (!req.isAdmin) {
+            return res.status(403).json({ success: false, message: "Not authorized" });
+        }
+
+        const user = await User.findByIdAndDelete(id)
+
+        if(!user) {
+            return res.status(404).json({success:false, message: "user not found"})
+        }
+        
+        return res.status(200).json({success:true, data: user})
+            
+    }catch(err){
+        res.status(500).json({success:false, message: err.message})
+        throw err;
+    }
+}
+
+export const makeUserAdmin = async(req, res) => {
+    try{
+        const {id} = req.params;
+        const user = await User.findById(id).select("-password")
+
+        if(!user){
+            return res.status(404).json({success:false, message: "Not found"})
+        }
+
+        user.isAdmin = !user.isAdmin
+        await user.save()
+
+        return res.status(200).json({success:true, message: "User status updated succefully", user})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ success: false, message: err.message });
+    }
+}
+
+export const makeUserBadged = async(req, res) => {
+    try{
+        const {id} = req.params;
+        const user = await User.findById(id).select("-password")
+
+        if(!user){
+            return res.status(404).json({success:false, message: "Not found"})
+        }
+
+        user.hasBadge = !user.hasBadge
+        await user.save()
+
+        return res.status(200).json({success:true, message: "User status updated succefully", user})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ success: false, message: err.message });
+    }
+}
 
 export const checkAuth = async (req, res) => {
     try {

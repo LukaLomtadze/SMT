@@ -35,7 +35,7 @@ const SignUpPage = () => {
   return (
     <div className='w-screen h-screen flex items-center justify-center'>
         <form className='text-white' onSubmit={handleSubmit}>
-            <div className='flex text-white flex-col items-center justify-between w-screen h-screen  pt-3 md:w-96 rounded-2xl md:h-[470px] bg-[#171717]'>
+            <div className='flex text-white flex-col items-center justify-around md:justify-between w-screen h-[100vh]  pt-3 md:w-96 rounded-2xl md:h-[470px] bg-[#171717]'>
                 <div className='flex flex-col gap-3 mt-20 md:mt-3 w-80'>
                     <h1 className='text-2xl text-center'>Create an account</h1>
                     <hr className=' text-neutral-600' />
@@ -61,7 +61,7 @@ const SignUpPage = () => {
 
                     {isLoading ? <Button label={<AiOutlineLoading3Quarters className="animate-spin mx-auto" />}></Button> : <Button label="Create Account" className="mt-3" />}
                 </div>
-                <div className='flex items-center justify-center bg-neutral-800 p-3 rounded-br-2xl rounded-bl-2xl w-full'>
+                <div className='flex items-center justify-center bg-neutral-800 mt-24 md:mt-0 p-3 rounded-br-2xl rounded-bl-2xl w-full'>
                     <p className='text-[14px] text-white'>Already have an account? </p>
                     <NavLink to={"/login"} className={"hover:underline hover:text-blue-300 text-neutral-400 "}>Log In</NavLink>
                 </div>

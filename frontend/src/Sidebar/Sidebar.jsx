@@ -56,7 +56,6 @@ const Sidebar = ({open, setOpen}) => {
         } fixed top-0 left-0 z-50 transition-all justify-between ease-in-out flex flex-col h-screen text-white text-[20px] gap-5 p-2 bg-[#171717] pt-5`}
         ref={sidebarRef}
       >
-        {/* Top Header */}
         <div className={`flex flex-col gap-10`}>
         <div className="flex flex-row items-center gap-3 transition-all ease-in-out duration-300 ">
           <div
@@ -73,7 +72,7 @@ const Sidebar = ({open, setOpen}) => {
               />
             )}
           </div>
-          <span className="text-[18px]">{open ? "SideBar.jsx" : ""}</span>
+          <span className="text-[18px]">{open ? "SMT" : ""}</span>
         </div>
         <div className={`flex flex-col gap-3 h-[60vh] md:h-[70vh] scrollbar-dark overflow-auto ${open ? "mt-5" : ""}`}>
           <span className={`${open ? "text-[14px] text-gray-400" : "hidden"}`}>

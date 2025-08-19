@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
+import User from "../models/user.model.js";
 
 export const verifyToken = async(req, res, next) => {
     const token = req.cookies.token;
@@ -14,6 +15,9 @@ export const verifyToken = async(req, res, next) => {
         }
 
         req.userId = decoded.userId;
+
+        const user = await User.findById(req.userId).select("isAdmin");
+        req.isAdmin = user?.isAdmin || false;
         next();
     }catch(err){
         console.error("Error: ", err)

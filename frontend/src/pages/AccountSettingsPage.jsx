@@ -268,7 +268,7 @@ const AccountSettingsPage = ({ open }) => {
                         
                     <h1>Account Details:</h1>
                     <div className='flex flex-col gap-2 text-neutral-300'>
-                        <p>Account Status: {user?.hasBadge ? "Verified" : "Not Verified"}</p>
+                        <p>Account Status: {user?.isAdmin ? "Admin" : (user?.hasBadge ? "Verified" : "Not Verified")}</p>
                         <p className=''>Account Id: {user?._id}</p>
                         <p className=''>Account Created at: {formatDate1}</p>
                         <p className=''>Account Updated at: {formatDate2.toUpperCase()}</p>

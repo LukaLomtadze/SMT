@@ -192,7 +192,7 @@ const HomePage = ({ open }) => {
   const {isOpen, toggleOpen} = useCommentStore()
 
   return (
-    <div className={`${!open ? "-mt-9" : "mt-0"} p-5 w-screen h-screen z-0`}>
+    <div className={`${!open ? "md:-mt-9" : "mt-0"} p-5 w-screen h-screen z-0`}>
       <div className={`${open ? "ml-80" : "sm:ml-30 ml-12 md:ml-72"} transition-all ease-in-out duration-100`}>
         <div className='flex flex-col justify-center w-[70vw] md:w-[60vw]'>
           <div className='flex flex-row text-white justify-evenly items-center'>
@@ -290,7 +290,7 @@ const HomePage = ({ open }) => {
                           <>
                             <button
                           onDoubleClick={() => handleDelete(item._id)}
-                          className='bg-white md:hidden h-[50%] p-1 cursor-pointer rounded-sm text-black'>
+                          className='bg-white md:hidden h-[80%] cursor-pointer rounded-sm text-black'>
                             <FaTrash />
                           </button>
                             

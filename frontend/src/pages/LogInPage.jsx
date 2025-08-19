@@ -49,7 +49,7 @@ const LogInPage = () => {
                     {isLoading ? <Button label={<AiOutlineLoading3Quarters className="animate-spin mx-auto" />}></Button> : <Button label="Log In" className="mt-3"/>}
                     <NavLink to={"/forgot-password"} className={"hover:underline text-center hover:text-blue-300 text-neutral-400"}>Forgot password?</NavLink>
                 </div>
-                <div className='flex items-center justify-center mt-[200px] md:mt-0 bg-neutral-800 p-3 rounded-br-2xl rounded-bl-2xl w-full'>
+                <div className='flex items-center justify-center mt-[100px] md:mt-0 bg-neutral-800 p-3 rounded-br-2xl rounded-bl-2xl w-full'>
                     <p className='text-[14px] text-white'>Don't have an account? </p>
                     <NavLink to={"/signup"} className={"hover:underline hover:text-blue-300 text-neutral-400 "}>Sign Up</NavLink>
                 </div>

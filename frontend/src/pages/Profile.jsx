@@ -45,7 +45,7 @@ const Profile = ({open}) => {
         fetchProfile();
     }, [id]);
 
-    const {updateProfileState} = useProfileRouterStore()
+    const {updateProfileState, initialState} = useProfileRouterStore()
 
     const isSmall = window.innerWidth <= 768;
     
@@ -55,14 +55,24 @@ const Profile = ({open}) => {
         <div className={`w-full h-full ${!open ? "-mt-8 " : ""}`}>
             <div className='mt-10 md:ml-4 ml-0 flex flex-col items-center mb-3 md:flex-row gap-5'>
                 <div>
-                   <img  src={user?.image || profileData?.image} className='md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 object-cover rounded-full' />
+                {profileData?.image ? (
+                    <img 
+                      src={profileData.image} 
+                      alt="profile" 
+                      className="md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 object-cover rounded-full" 
+                    />
+                    ) : (
+                      <Skeleton className="md:w-32 md:h-32 mt-5 md:mt-0 w-20 h-20 rounded-full" />
+                    )
+                }
+
                 </div>
                 <div className='flex-col flex h-12 md:h-32 justify-between'>
                 <div className='text-white mt-2 w-full flex flex-col'>
-                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg text-center'>{profileData?.name || <Skeleton className={"w-40 h-7 rounded-2xl"} />}</p>
+                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg flex items-center md:items-center text-center'>{profileData?.name || <Skeleton className={"w-40 h-7 rounded-2xl"} />}</p>
                     {profileData?.isAdmin || profileData?.hasBadge ? <MdVerified className='text-sky-400' /> : <></>}
                     </div>
-                    <p className='text-sm text-neutral-400'>{isOwner ? profileData?.email || <Skeleton className={"rounded-2xl mt-1 w-30 h-4"} /> : <></>}</p>
+                    <p className='text-sm text-neutral-400 text-center flex justify-center md:justify-normal'>{isOwner ? profileData?.email || <Skeleton className={"rounded-2xl mt-1 w-30 h-4"} /> : <></>}</p>
                     <div className='text-white flex flex-row md:gap-4 gap-2 mt-2'>
                         <p className='text-sm md:text-lg '>{profileData?.followersCount || 0} Followers</p>
                         <p className='text-sm md:text-lg '>{profileData?.followingCount || 0} Following</p>
@@ -80,7 +90,7 @@ const Profile = ({open}) => {
                       </NavLink>
                     {user?.isAdmin ? 
                     <NavLink to={`/control-panel`}>
-                          <button className='bg-amber-400/90 text-neutral-900 md:w-48 w-[148px] h-8 rounded-sm cursor-pointer hover:bg-amber-300 transition-all ease-in-out duration-75 '>
+                          <button className='bg-white text-neutral-900 md:w-48 w-[148px] h-8 rounded-sm cursor-pointer hover:bg-neutral-300 transition-all ease-in-out duration-75 '>
                         AdminPage
                       </button>
                     </NavLink> : <></>}
@@ -101,7 +111,7 @@ const Profile = ({open}) => {
     >
       <div
         onClick={() => updateProfileState(item.label.toLowerCase())}
-        className="hover:bg-neutral-700 active:hover:bg-neutral-600 rounded-sm flex flex-row items-center px-1 py-1"
+        className={`${initialState === item.label.toLowerCase() ? "bg-sky-400 text-black" : ""} hover:bg-blue-400 active:bg-sky-600 rounded-sm flex flex-row justify-center items-center px-1 py-1`}
       >
         <div className={`shrink-0 ${isSmall ? "text-2xl" : ""}`}>{item.icon}</div>
         {!isSmall && <p className="mx-2">{item.label}</p>}

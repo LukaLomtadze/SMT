@@ -23,7 +23,7 @@ app.use("/api/auth", authRoutes)
 
 const port = process.env.PORT || 4040;
 
-app.listen(port, async () => {
+app.listen(port, "0.0.0.0" ,async () => {
     connectDB();
     console.log(`server started on localhost:${port}`)
 })
