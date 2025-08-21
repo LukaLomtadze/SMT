@@ -23,6 +23,8 @@ import DoubleCheck from '../components/DoubleCheck';
 import { useCommentStore } from '../stateManagment/commentStore';
 import Comments from '../components/Comments';
 import { FaTrash } from "react-icons/fa6";
+import { GoBookmarkFill } from "react-icons/go";
+import { GoBookmark } from "react-icons/go";
 
 const PostImage = ({src}) => {
 
@@ -93,6 +95,7 @@ const HomePage = ({ open }) => {
   const {getPosts, isLoading, posts, createPost, deletePost} = usePostStore()
 
   const [isLiked, setIsLiked] = useState({})
+  const [isBookMarked, setIsBookMarked] = useState({})
 
   const API_URL = "http://localhost:4040/api/auth"
 
@@ -340,8 +343,10 @@ const HomePage = ({ open }) => {
                             {!isLiked[item._id] ? (<IoIosHeartEmpty />) : (<IoIosHeart className='text-pink-500 shadow-2xl'/>)}
                           </div>
 
-                          <div className='cursor-pointer hover:bg-lime-900 flex flex-row items-center justify-center hover:text-green-400 rounded-full p-1  md:text-lg text-sm'>
-                            <LiaRetweetSolid />
+                          <div className='cursor-pointer hover:bg-amber-900 flex flex-row items-center justify-center hover:text-amber-400 rounded-full p-1  md:text-lg text-sm'
+                            onClick={() => setIsBookMarked(prev => ({...prev, [item._id] : !prev[item._id]}))}
+                          >
+                            {isBookMarked[item._id] ? (<GoBookmarkFill className='text-amber-400' />) : (<GoBookmark />)}
                           </div>
                         </div>
 

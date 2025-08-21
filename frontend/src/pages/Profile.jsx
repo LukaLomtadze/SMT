@@ -11,7 +11,7 @@ import { useProfileRouterStore } from '../stateManagment/profileRouter';
 import ProfileStatePage from './ProfileStatePage';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Skeleton from '../components/Skeleton';
-
+import { GoBookmarkFill } from "react-icons/go";
 
 const Profile = ({open}) => {
 
@@ -21,7 +21,7 @@ const Profile = ({open}) => {
     const items = [
         {label: "Posts", icon: <BsFillCollectionFill />},
         {label: "Liked", icon: <FaHeart />},
-        {label: "Reposts", icon: <BiRepost />}
+        {label: "Marked", icon: <GoBookmarkFill />}
     ]
 
     const {id, id: personalId} = useParams()

@@ -16,6 +16,7 @@ import ForgotPassword from "./pages/ForgotPassword"
 import Profile from "./pages/Profile"
 import AccountSettingsPage from "./pages/AccountSettingsPage"
 import AdminPage from "./pages/AdminPage"
+import MessagingPage from "./pages/MessagingPage"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
 
@@ -150,6 +151,11 @@ function App() {
           }
         ></Route>
 
+          <Route path="/messages" element={
+            <ProtectRoute>
+              <MessagingPage open={open} />
+            </ProtectRoute>
+          }></Route>
         <Route path="/control-panel" element={
           <ProtectAdmingPage>
             <AdminPage open={open} />

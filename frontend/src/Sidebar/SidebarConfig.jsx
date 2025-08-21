@@ -3,12 +3,13 @@ import { IoLogoBuffer } from "react-icons/io";
 import { IoBookOutline } from "react-icons/io5";
 import { LuSettings2 } from "react-icons/lu";
 import { RiAdminFill } from "react-icons/ri";
+import { FaInbox } from "react-icons/fa6";
 
 export const SidebarItems = [
   {
-    icon: <MdTerminal />,
-    label: "Playground",
-    rotateItems: ["History", "Starred", "MetroMan"],
+    icon: <FaInbox />,
+    label: "Inbox",
+    rotateItems: ["Messages", "Notifications", "MetroMan"],
     forAdmin:false
     
   },

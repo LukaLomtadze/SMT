@@ -5,6 +5,8 @@ import { IoHeartDislike } from "react-icons/io5";
 import { FaFrownOpen } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../stateManagment/authStore';
+import { GoBookmarkSlash } from "react-icons/go";
+
 
 const ResuableNocontent = ({icon:Icon, label, pg}) => {
     return(
@@ -41,8 +43,8 @@ const ProfileStatePage = () => {
                 liked === null ? <ResuableNocontent icon={IoHeartDislike} label={"No Liked Posts"} pg={isOwner? "You haven't liked any posts yet" : "This user hasn't liked any posts yet"} /> : "Liked"
             }</>
         )}
-        {initialState === "reposts" && (
-            reposts === null ? <ResuableNocontent icon={FaFrownOpen} label={"No Reposted Posts"} pg={isOwner ? "You haven't reposted any posts yet" : "This user hasn't reposted any posts"} /> : "Reposts"
+        {initialState === "marked" && (
+            reposts === null ? <ResuableNocontent icon={GoBookmarkSlash} label={"No Bookmarked Posts"} pg={isOwner ? "You haven't bookmarked any posts yet" : "This user hasn't bookmarked any posts"} /> : "Bookmarks"
         )}
     </div>
   )
