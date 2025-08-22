@@ -1,7 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { FaMessage } from "react-icons/fa6";
 import { MdVerified } from "react-icons/md";
+import { useAuthStore } from "../stateManagment/authStore";
 
 const MessagingPage = ({ open }) => {
   const inputRef = useRef(null);
@@ -10,6 +11,13 @@ const MessagingPage = ({ open }) => {
     "https://s3.eu-central-1.amazonaws.com/uploads.mangoweb.org/shared-prod/visegradfund.org/uploads/2021/08/placeholder-male.jpg"
   );
   const [name, setName] = useState("Name");
+
+  const {user, followers, following, getFollowersAndFollowing} = useAuthStore()
+
+
+  useEffect(() => {
+    getFollowersAndFollowing(user?._id)
+  }, [user?._id, getFollowersAndFollowing])
 
   return (
     <div
@@ -29,7 +37,6 @@ const MessagingPage = ({ open }) => {
               </p>
             </div>
 
-            {/* Search */}
             <div className="border-b border-neutral-500 p-2">
               <div className="flex items-center gap-2 border border-neutral-500 rounded-2xl px-2 sm:px-3 py-1 focus-within:border-neutral-50">
                 <div
@@ -44,6 +51,32 @@ const MessagingPage = ({ open }) => {
                   placeholder="Search..."
                 />
               </div>
+            </div>
+
+            <div>
+              <div className="flex flex-row items-center px-5">
+                <div className="w-[90%] flex flex-row items-center border-b border-neutral-500  text-white mt-3">
+                  <p className="text-lg text-white self-start ml-7">Following</p>
+                </div>
+              </div>
+              {following.map((item) => {
+                return(
+                  <div key={item?._id}>
+                    <div className="flex flex-row items-center gap-1 text-white px-2 py-1 mx-3 cursor-pointer my-3 w-[90%] rounded-2xl hover:bg-neutral-600 transition-all ease-in-out duration-100">
+                      <div className="flex flex-row gap-2 items-center">
+                        <img src={item.image} className="w-8 h-8 rounded-full" />
+                      </div>
+                      <div>
+                        <p className="flex flex-row gap-1 items-center ">
+                          {item.name}{
+                            item.isAdmin || item.hasBadge ? <MdVerified className="text-sky-400" /> : <></>
+                          }
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
             
           </div>

@@ -334,28 +334,38 @@ export const findUsers = async (req, res) => {
     }
 }
 
-export const deleteUser = async(req, res) => {
-    const {id} = req.params;
+export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+  
+    try {
+      if (!req.isAdmin) {
+        return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+  
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+      }
+  
+      await User.updateMany(
+        { following: id },
+        { $pull: { following: id } }
+      );
+      await User.updateMany(
+        { followers: id },
+        { $pull: { followers: id } }
+      );
+  
 
-
-    try{     
-        if (!req.isAdmin) {
-            return res.status(403).json({ success: false, message: "Not authorized" });
-        }
-
-        const user = await User.findByIdAndDelete(id)
-
-        if(!user) {
-            return res.status(404).json({success:false, message: "user not found"})
-        }
-        
-        return res.status(200).json({success:true, data: user})
-            
-    }catch(err){
-        res.status(500).json({success:false, message: err.message})
-        throw err;
+      await User.findByIdAndDelete(id);
+  
+      return res.status(200).json({ success: true, message: "User deleted and references cleaned" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ success: false, message: err.message });
     }
-}
+  };
+  
 
 export const makeUserAdmin = async(req, res) => {
     try{

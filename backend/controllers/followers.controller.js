@@ -15,7 +15,7 @@ export const followUser = async (req, res) => {
         }
 
         const userToFollow = await User.findById(id);
-        const currentUser = await User.findById(currentUserId);
+        const currentUser = await User.findById(currentUserId)
 
         if (!userToFollow || !currentUser) {
             return res.status(404).json({ message: "User not found" });
@@ -70,3 +70,22 @@ export const unFollowUser = async (req, res) => {
     }
 };
 
+
+
+export const getPeopleWithRelations = async(req, res) => {
+    try {
+        const {id} = req.params;
+
+        const user = await User.findById(id).select("_id followers following").
+        populate("followers", "name image hasBadge isAdmin").
+        populate("following", "name image hasBadge isAdmin")
+
+        if(!user){
+            return res.status(404).json({success:false, message: "User Not Found"})
+        }
+
+        res.json(user)
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}

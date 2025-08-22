@@ -1,7 +1,7 @@
 import express from "express";
 import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage, getAllTheUsers, deleteUser, makeUserAdmin, makeUserBadged } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
-import { followUser, unFollowUser } from "../controllers/followers.controller.js";
+import { followUser, getPeopleWithRelations, unFollowUser } from "../controllers/followers.controller.js";
 import { newPost, getPosts, deletePost } from "../controllers/posts.controller.js";
 const router = express.Router();
 
@@ -36,5 +36,7 @@ router.get("/getAllUsers", verifyToken, getAllTheUsers)
 
 router.put("/makeUserAdmin/:id", verifyToken, makeUserAdmin)
 router.put("/makeUserBadged/:id", verifyToken, makeUserBadged)
+
+router.get("/getUsersWithRelations/:id", verifyToken, getPeopleWithRelations)
 
 export default router;
