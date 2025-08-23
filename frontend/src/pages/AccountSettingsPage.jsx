@@ -86,7 +86,7 @@ const PasswordUpdateForm = ({setEditPass, error ,password, setPassword, isLoadin
     const handleForm = async (e) => {
         e.preventDefault()
         try {
-            if(newPassowrd.trim().length === ""){
+            if(newPassowrd.trim() === ""){
                 return toast.error("Password can't be blank")
             }
 
@@ -227,7 +227,7 @@ const AccountSettingsPage = ({ open }) => {
                 <div className="flex justify-center md:justify-start mt-5">
                     {isLoadingImage ?
                      <Skeleton className={"w-20 h-20 z-10 flex flex-row items-center justify-center md:w-32 rounded-full md:h-32"}>
-                        <PiSpinnerBallFill className='w-14 z-50 h-14 md:w-24 md:h-24  mx-auto animate-[spin_0.4s_linear_infinite] ' />
+                        <AiOutlineLoading3Quarters className='w-14 z-50 h-14 md:w-24 md:h-24  mx-auto animate-[spin_0.4s_linear_infinite] ' />
                      </Skeleton> : 
                      <><input
                         type='file' 

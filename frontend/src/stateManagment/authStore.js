@@ -14,6 +14,7 @@ export const useAuthStore = create((set, get) => ({
     isLoadingImage: false,
     followers: [],
     following: [],
+    followersLoading: false,
 
     signup: async (email, password, name) => {
 		set({ isLoading: true, error: null });
@@ -180,18 +181,18 @@ export const useAuthStore = create((set, get) => ({
         }
     },
     getFollowersAndFollowing : async(id) => {
-        set({isLoading: true, error: null})
+        set({followersLoading: true, error: null})
         try {
             const response = await axios.get(`${API_URL}/getUsersWithRelations/${id}`, {withCredentials: true})
             set({
-                isLoading: false,
+                followersLoading: false,
                 followers: response.data.followers,
                 following: response.data.following,
             })
         } catch (error) {
             set({
                 error: error.response?.data?.message,
-                isLoading: false,
+                followersLoading: false,
             })
         }
     },
