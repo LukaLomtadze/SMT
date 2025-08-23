@@ -191,8 +191,10 @@ const HomePage = ({ open }) => {
 
   //const [isDeleteOption, setIsDeleteOption] = useState(false)
 
+  const [postId, setPostId] = useState(null)
 
-  const {isOpen, toggleOpen} = useCommentStore()
+
+  const {isOpen, toggleOpen, getComments} = useCommentStore()
 
   return (
     <div className={`${!open ? "md:-mt-9" : "mt-0"} p-5 w-screen h-screen z-0`}>
@@ -333,7 +335,11 @@ const HomePage = ({ open }) => {
                       <div className='w-full flex justify-center mt-3'>
                         
                         <div className='flex flex-row items-center justify-between  md:w-[40%] w-[80%]'>
-                          <div onClick={() => toggleOpen(isOpen)} className='cursor-pointer md:text-lg flex flex-row items-center justify-center hover:bg-sky-900 hover:text-blue-400 rounded-full p-1 text-sm'>
+                          <div onClick={() => {
+                              toggleOpen(isOpen);
+                              setPostId(item._id);
+                              getComments(item._id)
+                          }} className='cursor-pointer md:text-lg flex flex-row items-center justify-center hover:bg-sky-900 hover:text-blue-400 rounded-full p-1 text-sm'>
                             <GoComment />
                           </div>
 
@@ -350,7 +356,7 @@ const HomePage = ({ open }) => {
                           </div>
                         </div>
 
-                        <Comments />
+                        <Comments postId={postId} />
                       </div>
                     </div>
                   </div>

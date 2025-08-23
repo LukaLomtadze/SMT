@@ -3,6 +3,7 @@ import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,rese
 import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, getPeopleWithRelations, unFollowUser } from "../controllers/followers.controller.js";
 import { newPost, getPosts, deletePost } from "../controllers/posts.controller.js";
+import { getComments, newComment } from "../controllers/comments.controller.js";
 const router = express.Router();
 
 router.get("/check-auth", verifyToken, checkAuth);
@@ -38,5 +39,8 @@ router.put("/makeUserAdmin/:id", verifyToken, makeUserAdmin)
 router.put("/makeUserBadged/:id", verifyToken, makeUserBadged)
 
 router.get("/getUsersWithRelations/:id", verifyToken, getPeopleWithRelations)
+
+router.get("/getComments/:id", getComments)
+router.post("/newComment/:id", verifyToken, newComment)
 
 export default router;

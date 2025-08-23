@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useCommentStore } from '../stateManagment/commentStore'
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useAuthStore } from '../stateManagment/authStore';
 import { IoSendSharp } from "react-icons/io5";
+import { MdVerified } from 'react-icons/md';
+import Skeleton from './Skeleton';
+import CommentsSkeleton from './CommentsSkeleton';
 
-const Comments = () => {
+const Comments = ({postId}) => {
 
-    const {isOpen, toggleOpen} = useCommentStore()
+    const {isOpen, toggleOpen, isLoading, comments} = useCommentStore()
 
     const {user} = useAuthStore()
+
 
 
   return (
@@ -21,7 +25,7 @@ const Comments = () => {
 
 
             <div className='md:w-[60vw] z-[9999] absolute top-1/2 md:left-[57%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center py-4 md:h-[80vh] h-[65vh] w-[98vw] bg-neutral-800
-            rounded-lg justify-between
+            rounded-lg 
             '
 
             
@@ -33,7 +37,38 @@ const Comments = () => {
                     <p className='text-2xl'>Comments</p>
                     <div className='w-full h-[1px] bg-neutral-400'></div>
                 </div>
-
+                <div className='h-[80%] w-full overflow-y-auto'>
+                    
+                    {isLoading ?
+                        <CommentsSkeleton /> :
+                        (
+                            comments.length == 0 ? (<div className='w-full flex items-center justify-center h-full flex-col gap-2'>
+                                <p className='text-2xl'>No Comments</p>
+                                <p className='text-lg'>Be first to comment</p>
+                            </div>):
+                            (
+                                comments.map((item) => {
+                                    return(
+                                        <div className='flex flex-row items-center gap-2 ml-2'>
+                                            <div>
+                                                <img src={item.author.image} className='w-8 h-8 rounded-full' />
+                                            </div>
+                                            <div className='flex flex-col max-w-[90%] gap-2 bg-neutral-700 px-3 py-1 mt-3 rounded-2xl'>
+                                                <p className='flex flex-row items-center gap-1'>{item.author.name}
+                                                    {
+                                                        item.author.hasBadge || item.author.isAdmin ? 
+                                                        (<MdVerified className='text-sky-400' />) : (<></>)
+                                                    }
+                                                </p>
+                                                <p className='break-all'>{item.content}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            )
+                        )
+                    }
+                </div>
                 <div className='w-full flex flex-col'>
                     <div className='w-full h-[1px] bg-neutral-300'></div>
                     <div className='w-full pt-3 px-2 md:px-5 justify-center  flex flex-row'>

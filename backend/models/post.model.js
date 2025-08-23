@@ -40,6 +40,12 @@ const postSchema = new mongoose.Schema({
       trim: true
     }
   ],
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   visibility: {
     type: String,
     enum: ["public", "friends", "private"],

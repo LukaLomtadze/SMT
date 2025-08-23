@@ -3,7 +3,6 @@ import { FaSearch } from "react-icons/fa";
 import { FaMessage } from "react-icons/fa6";
 import { MdVerified } from "react-icons/md";
 import { useAuthStore } from "../stateManagment/authStore";
-import Skeleton from "./Skeleton";
 import FollowersSkeleton from "./FollowersSkeleton";
 
 const DesktopMessages = ({open}) => {
@@ -37,7 +36,7 @@ const DesktopMessages = ({open}) => {
             open ? "md:ml-75 md:w-[70vw]" : "md:ml-15 md:w-[90vw]"
           } h-screen transition-all ease-in-out duration-200`}
         >
-          <div className="bg-neutral-800 border-x border-neutral-400 w-full h-full flex flex-col md:flex-row">
+          <div className="bg-neutral-800  w-full h-full flex flex-col md:flex-row">
             <div className="w-full md:w-[30%] lg:w-[25%] flex flex-col bg-neutral-900 h-1/6 md:h-full">
               <div className="w-full flex items-center justify-center text-white py-3 sm:py-5 border-b border-neutral-500">
                 <p className="text-base sm:text-xl md:text-2xl pt-5 md:pt-0 mb-2 flex items-center gap-1 sm:gap-2 cursor-pointer">
