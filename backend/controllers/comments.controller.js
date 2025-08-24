@@ -25,29 +25,30 @@ export const getComments = async(req, res) => {
 }
 
 export const newComment = async (req, res) => {
-    try {
-      const { id: postId } = req.params;
-      const userId = req.userId;
-  
-      const post = await Post.findById(postId);
-      if (!post) {
-        return res.status(404).json({ message: "Post not found" });
-      }
-  
-      const comment = await Comment.create({
-        post: postId,
-        author: userId,
-        content: req.body.content,
-      });
-  
-      post.comments.push(comment._id);
-      post.commentsCount = (post.commentsCount || 0) + 1;
-      await post.save();
-  
-      res.status(201).json(comment);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error creating comment" });
+  try {
+    const { id: postId } = req.params;
+    const userId = req.userId;
+
+    const post = await Post.findById(postId);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
-  };
-  
+
+    let comment = await Comment.create({
+      post: postId,
+      author: userId,
+      content: req.body.content,
+    });
+
+    post.comments.push(comment._id);
+    post.commentsCount = (post.commentsCount || 0) + 1;
+    await post.save();
+
+    comment = await comment.populate("author", "name image hasBadge isAdmin");
+
+    res.status(201).json({ success: true, data: comment });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error creating comment" });
+  }
+};

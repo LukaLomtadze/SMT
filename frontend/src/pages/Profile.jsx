@@ -12,6 +12,8 @@ import ProfileStatePage from './ProfileStatePage';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import Skeleton from '../components/Skeleton';
 import { GoBookmarkFill } from "react-icons/go";
+import ConnectionsList from '../BigComponents/ConnectionsList';
+import { useConnectionsStore } from '../stateManagment/connections';
 
 const Profile = ({open}) => {
 
@@ -48,6 +50,10 @@ const Profile = ({open}) => {
     const {updateProfileState, initialState} = useProfileRouterStore()
 
     const isSmall = window.innerWidth <= 768;
+
+    const {isOpen, toggleOpen, windowUpdate} = useConnectionsStore()
+
+    
     
 
   return (
@@ -69,13 +75,48 @@ const Profile = ({open}) => {
                 </div>
                 <div className='flex-col flex h-12 md:h-32 justify-between'>
                 <div className='text-white mt-2 w-full flex flex-col'>
-                    <div className='flex flex-row items-center w-full pl-1 md:pl-0'><p className='md:text-xl text-lg flex items-center md:items-center text-center'>{profileData?.name || <Skeleton className={"w-40 h-7 rounded-2xl"} />}</p>
+                    <div 
+                      className='flex flex-row items-center justify-center md:justify-normal w-full pl-1 md:pl-0'>
+                        <div 
+                          className='md:text-xl text-lg flex items-center md:items-center text-center'>
+                            {profileData?.name || <Skeleton className={"w-30 h-4 rounded-2xl"} />}
+                        </div>
                     {profileData?.isAdmin || profileData?.hasBadge ? <MdVerified className='text-sky-400' /> : <></>}
                     </div>
-                    <p className='text-sm text-neutral-400 text-center flex justify-center md:justify-normal'>{isOwner ? profileData?.email || <Skeleton className={"rounded-2xl mt-1 w-30 h-4"} /> : <></>}</p>
-                    <div className='text-white flex flex-row md:gap-4 gap-2 mt-2'>
-                        <p className='text-sm md:text-lg '>{profileData?.followersCount || 0} Followers</p>
-                        <p className='text-sm md:text-lg '>{profileData?.followingCount || 0} Following</p>
+                    <div 
+                      className='text-sm text-neutral-400 text-center flex justify-center md:justify-normal'>
+                      {isOwner ? profileData?.email || 
+                      <Skeleton className={"rounded-2xl mt-1 md:w-50 w-30 h-4 mb-2"} /> 
+                        : 
+                      <></>}
+                    </div>
+                    <div 
+                        className='text-white flex flex-row md:gap-4 gap-2 mt-2 justify-center'>
+                        <p className='text-sm md:text-lg flex flex-row items-center gap-1'>
+                          <span 
+                            onClick={() => {if(isOwner){toggleOpen(isOpen); windowUpdate("followers")}}}
+                            className={`${isOwner ? "hover:underline cursor-pointer" : ""}`}>
+                              {profileData?.followersCount || 0}
+                              </span> 
+                              <span 
+                                className={`${isOwner ? "hover:underline cursor-pointer" : ""}`}
+                                onClick={() => {if(isOwner){toggleOpen(isOpen); windowUpdate("followers")}}}
+                                >
+                                  Followers
+                              </span>
+                          </p>
+                        <p className='text-sm md:text-lg flex flex-row items-center gap-1'>
+                          <span 
+                            onClick={() => {if(isOwner){toggleOpen(isOpen); windowUpdate("following")}}}
+                            className={`${isOwner ? "hover:underline cursor-pointer" : ""}`}>
+                          {profileData?.followingCount || 0}
+                          </span> 
+                          <span 
+                            onClick={() => {if(isOwner){toggleOpen(isOpen); windowUpdate("following")}}}
+                            className={`${isOwner ? "hover:underline cursor-pointer" : ""}`}>
+                              Following
+                          </span>
+                        </p>
                     </div>
                 </div>
 
@@ -95,8 +136,8 @@ const Profile = ({open}) => {
                       </button>
                     </NavLink> : <></>}
                     </> : <FollowButton   profileId={id}
-                                    profileData={profileData} 
-                                    setProfileData={setProfileData}  />}
+                                          profileData={profileData} 
+                                          setProfileData={setProfileData}  />}
                 </div>
                 </div>
             </div>
@@ -104,25 +145,28 @@ const Profile = ({open}) => {
             <hr className={`${open ? "w-[85%]" : "w-[80%] md:w-[90%]"} ml-12 md:ml-0  text-neutral-500 md:mt-12 ${user?.isAdmin ? "mt-30" : "mt-20"}`} />
 
             <div className="text-white flex flex-wrap gap-4 mt-5 md:ml-1 ml-0 md:justify-start justify-center">
-  {items.map((item, i) => (
-    <div
-      key={i}
-      className="cursor-pointer rounded-xl flex flex-col justify-center flex-[1_1_100px] sm:flex-[0_1_auto] min-w-[50px] max-w-[90px] items-center"
-    >
-      <div
-        onClick={() => updateProfileState(item.label.toLowerCase())}
-        className={`${initialState === item.label.toLowerCase() ? "bg-sky-400 text-black" : ""} hover:bg-blue-400 active:bg-sky-600 rounded-sm flex flex-row justify-center items-center px-1 py-1`}
-      >
-        <div className={`shrink-0 ${isSmall ? "text-2xl" : ""}`}>{item.icon}</div>
-        {!isSmall && <p className="mx-2">{item.label}</p>}
-      </div>
-      <div className="w-full h-[1px] bg-neutral-500 mt-3"></div>
-    </div>
-  ))}
-</div>
+                {items.map((item, i) => (
+                  <div
+                    key={i}
+                    className="cursor-pointer rounded-xl flex flex-col justify-center flex-[1_1_100px] sm:flex-[0_1_auto] min-w-[50px] max-w-[90px] items-center"
+                  >
+                    <div
+                      onClick={() => updateProfileState(item.label.toLowerCase())}
+                      className={`${initialState === item.label.toLowerCase() ? "bg-sky-400 text-black" : ""} hover:bg-blue-400 active:bg-sky-600 rounded-sm flex flex-row justify-center items-center px-1 py-1`}
+                    >
+                      <div className={`shrink-0 ${isSmall ? "text-2xl" : ""}`}>{item.icon}</div>
+                      {!isSmall && <p className="mx-2">{item.label}</p>}
+                    </div>
+                    <div className="w-full h-[1px] bg-neutral-500 mt-3"></div>
+                  </div>
+                ))}
+              </div>
 
             <ProfileStatePage open={open} />
         </div>
+        {
+          isOpen ? <ConnectionsList /> : <></>
+        }
     </div>
   )
 }

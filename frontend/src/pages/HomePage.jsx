@@ -288,7 +288,7 @@ const HomePage = ({ open }) => {
                             {item.author.name}
                             {item.author?.isAdmin || item.author?.hasBadge ? <MdVerified  className='text-sky-400' /> : <></>}
                           </p>
-                          <div className='flex md:hidden text-[10px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
+                          <div className='flex md:hidden text-[10px] text-gray-500'>•{calculateUploadDate(item.createdAt)}</div>
                           
                       </NavLink>
                       {user?._id === item.author?._id ? 
@@ -303,7 +303,7 @@ const HomePage = ({ open }) => {
                       :
                         <></>
                       }
-                      <div className='hidden md:inline text-[14px] text-gray-500'>{calculateUploadDate(item.createdAt)}</div>
+                      <div className='hidden md:inline text-[14px] text-gray-500'>• {calculateUploadDate(item.createdAt)}</div>
                       
                       </div>
                       {user?._id === item.author?._id || user?.isAdmin ? 
@@ -339,8 +339,11 @@ const HomePage = ({ open }) => {
                               toggleOpen(isOpen);
                               setPostId(item._id);
                               getComments(item._id)
-                          }} className='cursor-pointer md:text-lg flex flex-row items-center justify-center hover:bg-sky-900 hover:text-blue-400 rounded-full p-1 text-sm'>
-                            <GoComment />
+                          }} className='cursor-pointer md:text-lg flex gap-1 hover:text-blue-400 flex-row items-center justify-center  rounded-full  text-sm'>
+                            <div className='hover:bg-sky-900 hover:text-blue-400 p-1 rounded-full'>
+                              <GoComment />
+                            </div>
+                            <p className='text-[12px]'>{item.commentsCount}</p>
                           </div>
 
                           <div className='cursor-pointer hover:bg-fuchsia-900 flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm hover:text-pink-400'

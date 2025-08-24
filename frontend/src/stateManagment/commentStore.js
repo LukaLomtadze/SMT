@@ -26,5 +26,22 @@ export const useCommentStore = create((set) => ({
         }catch(error){
             set({isLoading:false, error: error.data.error})
         }
+    },
+    createComment: async(id, content) => {
+        set({isLoading:true, error: null})
+
+        try{
+            const response = await axios.post(`${API_URL}/newComment/${id}`, {content} ,{withCredentials: true})
+
+            set((state) => ({
+                isLoading: false,
+                comments: [...state.comments, response.data.data],
+                error:null,
+            }))
+        }catch(error){
+            set({isLoading:false,
+                error: error.data.error
+            })
+        }
     }
 }))

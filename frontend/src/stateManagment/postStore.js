@@ -63,5 +63,25 @@ export const usePostStore = create((set) => ({
               });
               throw error;
         }
+    },
+
+    getUserPosts: async(id) => {
+        set({isLoading: true})
+
+        try{
+            const response = await axios.get(`${API_URL}/getAuthorPosts/${id}`, {withCredentials: true})
+
+            set({
+                isLoading: false,
+                posts: response.data.data,
+                error: null
+            })
+        }catch(error){
+            set({
+                error: error.response?.data?.message || error.message,
+                isLoading: false,
+              });
+            throw error;
+        }
     }
 }))

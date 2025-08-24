@@ -2,7 +2,7 @@ import express from "express";
 import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage, getAllTheUsers, deleteUser, makeUserAdmin, makeUserBadged } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, getPeopleWithRelations, unFollowUser } from "../controllers/followers.controller.js";
-import { newPost, getPosts, deletePost } from "../controllers/posts.controller.js";
+import { newPost, getPosts, deletePost, getAuthorPosts } from "../controllers/posts.controller.js";
 import { getComments, newComment } from "../controllers/comments.controller.js";
 const router = express.Router();
 
@@ -30,6 +30,8 @@ router.post("/unfollow/:id", verifyToken, unFollowUser);
 
 router.post("/newPost", verifyToken, newPost)
 router.get("/getPosts", verifyToken, getPosts)
+
+router.get("/getAuthorPosts/:id", verifyToken, getAuthorPosts)
 
 router.delete("/deletePost/:id", verifyToken, deletePost)
 router.delete("/deleteUser/:id", verifyToken, deleteUser)

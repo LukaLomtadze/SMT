@@ -59,10 +59,25 @@ export const deletePost = async (req, res) => {
   try{
     const postToDelete = await Post.findByIdAndDelete(id)
     return res.status(200).json({success: true, data: postToDelete})
-  }catch(err){
+  }catch(error){
     console.error(error.message);
     res.status(500).json({success:false, message: "Server Error"});
   }
 }
   
+export const getAuthorPosts = async(req, res) => {
+  const {id} = req.params;
 
+  try{
+
+    const posts = await Post.find({author: id}).
+    populate("author", "image name isAdmin hasBadge")
+    .sort({createdAt: -1})
+
+    return res.status(200).json({ success: true, data: posts });
+
+  }catch(error){
+    console.error(error.message);
+    res.status(500).json({success:false, message: "Server Error"});
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useProfileRouterStore } from '../stateManagment/profileRouter'
 import { HiMiniSquares2X2 } from "react-icons/hi2";
 import { IoHeartDislike } from "react-icons/io5";
@@ -6,6 +6,8 @@ import { FaFrownOpen } from "react-icons/fa";
 import { useParams } from 'react-router-dom';
 import { useAuthStore } from '../stateManagment/authStore';
 import { GoBookmarkSlash } from "react-icons/go";
+import { usePostStore } from '../stateManagment/postStore';
+import ProfilePosts from '../BigComponents/ProfilePosts';
 
 
 const ResuableNocontent = ({icon:Icon, label, pg}) => {
@@ -24,20 +26,53 @@ const ProfileStatePage = () => {
 
     const {initialState, updateProfileState} = useProfileRouterStore()
 
-    const [posts, setPosts] = useState(null);
+    const {getUserPosts, posts, isLoading} = usePostStore()
+
+    const [posts2, setPosts2] = useState(null);
     const [liked, setLiked] = useState(null);
     const [reposts, setReposts] = useState(null);
 
     const {id: profileId} = useParams()
     const {user} = useAuthStore()
     const isOwner = user?._id === profileId;
+
+
+    useEffect(() => {
+        if(profileId){
+            getUserPosts(profileId)
+        }
+    }, [profileId, getUserPosts])
+
+
   return (
-    <div>
-        {initialState === "posts" && (
-            <>{
-                posts === null ? <ResuableNocontent icon={HiMiniSquares2X2} label={"No Content"} pg={isOwner ? "You haven't published any posts yet" : "This user hasn't published any posts"} /> : "Posts"
-            } </>
-        )}
+     <div>
+            {initialState === "posts" && (
+            <>
+                {isLoading ? (
+                <p className="text-white">Loading...</p>
+                ) : posts.length === 0 ? (
+                <ResuableNocontent
+                    icon={HiMiniSquares2X2}
+                    label={"No Content"}
+                    pg={
+                    isOwner
+                        ? "You haven't published any posts yet"
+                        : "This user hasn't published any posts"
+                    }
+                />
+                ) : (
+                
+                posts.map((post, i) => (
+                    <ProfilePosts id={post._id} image={post.author.image} name={post.author.name} content={post.content} authorId={post.author._id} isAdmin={post.author.isAdmin} hasBadge={post.author.hasBadge} contentImage={post.images} i={i} 
+                    posts={posts}
+                    />
+                    )
+                )
+                )
+                }
+            </>
+            )}
+
         {initialState === "liked" && (
             <>{
                 liked === null ? <ResuableNocontent icon={IoHeartDislike} label={"No Liked Posts"} pg={isOwner? "You haven't liked any posts yet" : "This user hasn't liked any posts yet"} /> : "Liked"
