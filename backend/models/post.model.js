@@ -22,9 +22,23 @@ const postSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      count: Number,
     }
   ],
+  bookMarks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }
+  ],
+  likesCount: {
+    type: Number,
+    default: 0,
+  },
+  bookmarkCount:{
+    type: Number,
+    default: 0
+  },
+
   repost: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Post",

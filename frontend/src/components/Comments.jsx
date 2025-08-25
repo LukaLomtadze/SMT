@@ -47,7 +47,7 @@ const Comments = ({postId}) => {
     <>
     {isOpen ? 
         <div className='w-screen h-screen flex items-center justify-center'>
-            <div className='w-screen h-screen z-[9999] absolute top-0 right-0 bg-black opacity-60'
+            <div className='w-screen h-screen z-[9999] absolute top-0 right-0 bg-black opacity-30'
             onClick={() => {toggleOpen(isOpen); setContent("")}}
             ></div>
 

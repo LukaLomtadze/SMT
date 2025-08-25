@@ -92,10 +92,7 @@ const HomePage = ({ open }) => {
 
   const FRONT_URL = "http://localhost:5173/account/"
 
-  const {getPosts, isLoading, posts, createPost, deletePost} = usePostStore()
-
-  const [isLiked, setIsLiked] = useState({})
-  const [isBookMarked, setIsBookMarked] = useState({})
+  const {getPosts, isLoading, posts, createPost, deletePost, toggleLike, toggleBookmark} = usePostStore()
 
   const API_URL = "http://localhost:4040/api/auth"
 
@@ -346,16 +343,29 @@ const HomePage = ({ open }) => {
                             <p className='text-[12px]'>{item.commentsCount}</p>
                           </div>
 
-                          <div className='cursor-pointer hover:bg-fuchsia-900 flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm hover:text-pink-400'
-                            onClick={() => setIsLiked(prev => ({...prev, [item._id] : !prev[item._id]}))}
+                          <div className='cursor-pointer  flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm gap-1 hover:text-pink-400'
+                            onClick={() => {
+                              
+                              toggleLike(item?._id)
+                          }}
                           >
-                            {!isLiked[item._id] ? (<IoIosHeartEmpty />) : (<IoIosHeart className='text-pink-500 shadow-2xl'/>)}
+                            <div className='hover:bg-fuchsia-900 rounded-full p-1'>
+                              {item.liked ? (<IoIosHeart className='text-pink-500 shadow-2xl'/>) : (<IoIosHeartEmpty />)}
+                            </div>
+                            <p className='text-[12px]'>{item.likesCount}</p>
                           </div>
 
-                          <div className='cursor-pointer hover:bg-amber-900 flex flex-row items-center justify-center hover:text-amber-400 rounded-full p-1  md:text-lg text-sm'
-                            onClick={() => setIsBookMarked(prev => ({...prev, [item._id] : !prev[item._id]}))}
+                          <div className='cursor-pointer flex flex-row items-center justify-center hover:text-amber-400 rounded-full p-1 gap-1  md:text-lg text-sm'
+                            onClick={() => {
+
+                            toggleBookmark(item?._id)
+                          }
+                          }
                           >
-                            {isBookMarked[item._id] ? (<GoBookmarkFill className='text-amber-400' />) : (<GoBookmark />)}
+                            <div className='hover:bg-amber-900 p-1 rounded-full'>
+                              {item.bookmarked ? (<GoBookmarkFill className='text-amber-400' />) : (<GoBookmark />)}
+                            </div>
+                            <p className='text-[12px]'>{item.bookmarkCount}</p>
                           </div>
                         </div>
 

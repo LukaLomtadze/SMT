@@ -8,6 +8,7 @@ import { useAuthStore } from '../stateManagment/authStore';
 import { GoBookmarkSlash } from "react-icons/go";
 import { usePostStore } from '../stateManagment/postStore';
 import ProfilePosts from '../BigComponents/ProfilePosts';
+import BigSkeletons from '../components/BigSkeletons';
 
 
 const ResuableNocontent = ({icon:Icon, label, pg}) => {
@@ -49,7 +50,11 @@ const ProfileStatePage = () => {
             {initialState === "posts" && (
             <>
                 {isLoading ? (
-                <p className="text-white">Loading...</p>
+                <div className='w-full flex items-center justify-center'>
+                    <div className='w-[65%]'>
+                        <BigSkeletons />
+                    </div>
+                </div>
                 ) : posts.length === 0 ? (
                 <ResuableNocontent
                     icon={HiMiniSquares2X2}
@@ -62,12 +67,31 @@ const ProfileStatePage = () => {
                 />
                 ) : (
                 
-                posts.map((post, i) => (
-                    <ProfilePosts id={post._id} image={post.author.image} name={post.author.name} content={post.content} authorId={post.author._id} isAdmin={post.author.isAdmin} hasBadge={post.author.hasBadge} contentImage={post.images} i={i} 
-                    posts={posts}
+                <div className=''>
+                    {posts.map((post, i) => (
+                    <div key={i} className={`w-full flex justify-center`}>
+                        <ProfilePosts 
+                            id={post._id} 
+                            image={post.author.image} 
+                            name={post.author.name} 
+                            content={post.content} 
+                            authorId={post.author._id} 
+                            isAdmin={post.author.isAdmin} 
+                            hasBadge={post.author.hasBadge} 
+                            contentImage={post.images} 
+                            i={i} 
+                            posts={posts} 
+                            createdAt={post.createdAt}
+                            commentCount={post.commentsCount}
+                            isLiked={post.liked}
+                            isBookMarked={post.bookmarked}
+                            likesCount={post.likesCount}
+                            bookmarkCount={post.bookmarkCount}
                     />
+                    </div>
                     )
-                )
+                )}
+                </div>
                 )
                 }
             </>

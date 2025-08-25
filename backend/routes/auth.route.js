@@ -2,7 +2,7 @@ import express from "express";
 import { login, logout, signup, verifyEmail, forgotPassword,updateUserName ,resetPassword, checkAuth, updatePassword, getUsers, findUsers, updateImage, getAllTheUsers, deleteUser, makeUserAdmin, makeUserBadged } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, getPeopleWithRelations, unFollowUser } from "../controllers/followers.controller.js";
-import { newPost, getPosts, deletePost, getAuthorPosts } from "../controllers/posts.controller.js";
+import { newPost, getPosts, deletePost, getAuthorPosts, toggleLike, toggleBookMark } from "../controllers/posts.controller.js";
 import { getComments, newComment } from "../controllers/comments.controller.js";
 const router = express.Router();
 
@@ -44,5 +44,8 @@ router.get("/getUsersWithRelations/:id", verifyToken, getPeopleWithRelations)
 
 router.get("/getComments/:id", getComments)
 router.post("/newComment/:id", verifyToken, newComment)
+
+router.patch("/likePost/:id", verifyToken, toggleLike)
+router.patch("/bookmarkPost/:id", verifyToken, toggleBookMark)
 
 export default router;

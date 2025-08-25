@@ -83,5 +83,33 @@ export const usePostStore = create((set) => ({
               });
             throw error;
         }
+    },
+    toggleLike: async(id) => {
+        try{
+            const response = await axios.patch(`${API_URL}/likePost/${id}`, {},{withCredentials: true});
+            const {likesCount, liked} = response.data.data
+
+            set((state) => ({
+                posts: state.posts.map(post => 
+                    post._id === id ? {...post, likesCount, liked} : post
+                )
+            }))
+        }catch(error){
+            set({ error: error.response?.data?.message || error.message });
+        }
+    },
+    toggleBookmark: async(id) => {
+        try{
+            const response = await axios.patch(`${API_URL}/bookmarkPost/${id}`, {},{withCredentials: true});
+            const {bookmarkCount, bookmarked} = response.data.data
+
+            set((state) => ({
+                posts: state.posts.map(post => 
+                    post._id === id ? {...post, bookmarkCount, bookmarked} : post
+                )
+            }))
+        }catch(error){
+            set({ error: error.response?.data?.message || error.message });
+        }
     }
 }))
