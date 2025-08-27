@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FaHeart } from "react-icons/fa6";
 import { BsFillCollectionFill } from "react-icons/bs";
 import { useAuthStore } from '../stateManagment/authStore';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams, NavLink, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { MdVerified } from "react-icons/md";
 import FollowButton from '../components/FollowButton';
@@ -25,6 +25,8 @@ const Profile = ({open}) => {
         {label: "Liked", icon: <FaHeart />},
         {label: "Marked", icon: <GoBookmarkFill />}
     ]
+
+    
 
     const {id, id: personalId} = useParams()
 

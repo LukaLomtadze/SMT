@@ -9,32 +9,20 @@ export const SidebarItems = [
   {
     icon: <FaInbox />,
     label: "Inbox",
-    rotateItems: ["Messages", "Notifications", "MetroMan"],
+    rotateItems: ["Messages", "Notifications"],
     forAdmin:false
     
   },
   {
-    icon: <IoLogoBuffer />,
-    label: "Models",
-    rotateItems: ["Genesis", "Explorer", "Quantum"],
-    forAdmin: false
-  },
-  {
-    icon: <IoBookOutline />,
-    label: "Documentation",
-    rotateItems: ["Introduction", "Get Started", "Tutorials"],
-    forAdmin: false
-  },
-  {
     icon: <LuSettings2 />,
     label: "Settings",
-    rotateItems: ["Account Settings", "General Settings"],
+    rotateItems: ["Account Settings"],
     forAdmin: false
   },
   {
     icon: <RiAdminFill />,
     label: "Admin",
-    rotateItems: ["Control Panel", "Analytics"],
+    rotateItems: ["Control Panel"],
     forAdmin: true,
   }
 ];

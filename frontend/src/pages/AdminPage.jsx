@@ -100,7 +100,7 @@ const AdminPage = ({ open }) => {
             
           ) : (
             <>
-              <h2 className="text-lg font-semibold mb-4 text-white">All Users</h2>
+              <h2 className="text-lg font-semibold mb-4 text-white ml-4">All Users</h2>
 
               <div className="space-y-2">
                 {users.map((item) => (

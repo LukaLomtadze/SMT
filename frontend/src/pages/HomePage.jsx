@@ -268,7 +268,7 @@ const HomePage = ({ open }) => {
               posts.map((item, i) => {
                 
                 return(
-                  <div key={i} className={`p-5 border-1 mb-10 ${i == 0 ? "mt-15" : ""} rounded-2xl ${i == posts.length - 1 ? "mb-10" : ""} w-[90%]  text-white border-neutral-500`}>
+                  <div key={i} className={`p-5 bg-neutral-800 shadow-2xl mb-10 ${i == 0 ? "mt-15" : ""} rounded-lg ${i == posts.length - 1 ? "mb-10" : ""} w-[90%]  text-white border-neutral-500`}>
                     <div className='flex gap-2 flex-row justify-between'>
                       <div className='flex gap-2 flex-row items'>
                       <NavLink to={`${FRONT_URL}${item.author._id}`} className={"w-8 h-8 md:w-12 md:h-12"}>
@@ -331,7 +331,7 @@ const HomePage = ({ open }) => {
                       
                       <div className='w-full flex justify-center mt-3'>
                         
-                        <div className='flex flex-row items-center justify-between  md:w-[40%] w-[80%]'>
+                        <div className='flex flex-row items-center text-neutral-400 justify-between  md:w-[40%] w-[80%]'>
                           <div onClick={() => {
                               toggleOpen(isOpen);
                               setPostId(item._id);
@@ -343,7 +343,7 @@ const HomePage = ({ open }) => {
                             <p className='text-[12px]'>{item.commentsCount}</p>
                           </div>
 
-                          <div className='cursor-pointer  flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm gap-1 hover:text-pink-400'
+                          <div className={`cursor-pointer  flex flex-row items-center justify-center  rounded-full p-1  md:text-lg text-sm gap-1 hover:text-pink-400 ${item?.liked ? "text-pink-500" : "text-neutral-400"}`}
                             onClick={() => {
                               
                               toggleLike(item?._id)
@@ -352,10 +352,12 @@ const HomePage = ({ open }) => {
                             <div className='hover:bg-fuchsia-900 rounded-full p-1'>
                               {item.liked ? (<IoIosHeart className='text-pink-500 shadow-2xl'/>) : (<IoIosHeartEmpty />)}
                             </div>
-                            <p className='text-[12px]'>{item.likesCount}</p>
+                            <p className={`text-[12px]`}>    
+                              {item.likesCount}
+                            </p>
                           </div>
 
-                          <div className='cursor-pointer flex flex-row items-center justify-center hover:text-amber-400 rounded-full p-1 gap-1  md:text-lg text-sm'
+                          <div className={`cursor-pointer flex flex-row items-center justify-center hover:text-amber-400 rounded-full p-1 gap-1  md:text-lg text-sm ${item?.bookmarked ? "text-amber-500" : "text-neutral-400"}`}
                             onClick={() => {
 
                             toggleBookmark(item?._id)

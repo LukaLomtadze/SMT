@@ -3,3 +3,32 @@
 body, html{
     overflow: hidden;
 }
+
+html {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #444 #1a1a1a; /* thumb #444, track #1a1a1a */
+  }
+  
+  /* Chrome, Edge, Safari */
+  ::-webkit-scrollbar {
+    width: 10px; /* Adjust width */
+    height: 10px; /* For horizontal scroll */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a; /* Track color */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #444; /* Thumb color */
+    border-radius: 8px;
+    border: 2px solid #1a1a1a; /* Adds gap effect */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #666; /* On hover */
+  }
+  
+  ::-webkit-scrollbar-corner {
+    background: #1a1a1a; /* Corner between horizontal & vertical scrollbars */
+  }

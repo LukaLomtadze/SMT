@@ -4,6 +4,9 @@ import { verifyToken } from "../middleware/verifyToken.js";
 import { followUser, getPeopleWithRelations, unFollowUser } from "../controllers/followers.controller.js";
 import { newPost, getPosts, deletePost, getAuthorPosts, toggleLike, toggleBookMark } from "../controllers/posts.controller.js";
 import { getComments, newComment } from "../controllers/comments.controller.js";
+import { getNotification } from "../controllers/notification.controller.js";
+
+
 const router = express.Router();
 
 router.get("/check-auth", verifyToken, checkAuth);
@@ -47,5 +50,7 @@ router.post("/newComment/:id", verifyToken, newComment)
 
 router.patch("/likePost/:id", verifyToken, toggleLike)
 router.patch("/bookmarkPost/:id", verifyToken, toggleBookMark)
+
+router.get("/getNotifications", verifyToken, getNotification)
 
 export default router;

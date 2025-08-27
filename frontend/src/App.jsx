@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useLocation } from "react-router-dom"
+import { Navigate, NavLink, Route, Routes, useLocation } from "react-router-dom"
 import HomePage from "./pages/HomePage"
 import SignUpPage from "./pages/SignUpPage"
 import LogInPage from "./pages/LogInPage"
@@ -17,6 +17,8 @@ import Profile from "./pages/Profile"
 import AccountSettingsPage from "./pages/AccountSettingsPage"
 import AdminPage from "./pages/AdminPage"
 import MessagingPage from "./pages/MessagingPage"
+import { FaBell } from "react-icons/fa";
+import Notifications from "./pages/Notifications"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
 
@@ -141,6 +143,10 @@ function App() {
       {showSidebar && <Sidebar open={open} setOpen={setOpen} />
       }
 
+      <NavLink to={"/notifications"}>
+        {showSidebar && <FaBell className={`text-white text-lg absolute transition-all top-7 duration-100 ease-in-out ${open ? "left-70" : "left-15"} cursor-pointer`} />}
+      </NavLink>
+
       <Routes>
         <Route
           path="/"
@@ -150,6 +156,14 @@ function App() {
             </ProtectRoute>
           }
         ></Route>
+
+        <Route path="/notifications"
+          element={
+            <ProtectRoute>
+              <Notifications open={open} />
+            </ProtectRoute>
+          }
+        />
 
           <Route path="/messages" element={
             <ProtectRoute>

@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Post from "../models/post.model.js";
 import cloudinary from "../utils/cloudinary.js";
+import Notification from "../models/notifications.model.js";
 
 export const getPosts = async (req, res) => {
   try {
@@ -124,6 +125,16 @@ export const toggleLike = async(req, res) => {
     }
     else{
       post.likes.push(userId)
+
+
+      if(post.author._id.toString() !== userId){
+        await Notification.create({
+          user: post.author._id,
+          sender: userId,
+          type: "like",
+          post: post._id
+        })
+      }
     }
 
     post.likesCount = post.likes.length
@@ -155,6 +166,16 @@ export const toggleBookMark = async(req, res) => {
     }
     else{
       post.bookMarks.push(userId)
+
+
+      if(post.author._id.toString() !== userId){
+        await Notification.create({
+          user: post.author._id,
+          sender: userId,
+          type: "bookmark",
+          post: post._id
+        })
+      }
     }
 
     post.bookmarkCount = post.bookMarks.length

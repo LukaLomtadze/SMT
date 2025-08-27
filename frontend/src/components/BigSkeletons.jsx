@@ -1,7 +1,7 @@
 import React from 'react'
 import Skeleton from './Skeleton'
 
-const BigSkeletons = () => {
+const BigSkeletons = ({size}) => {
   return (
     <>
     <div className='flex flex-col gap-2 p-10 mt-10'>
@@ -13,6 +13,11 @@ const BigSkeletons = () => {
                     </div>
                   </div>
                   <Skeleton className={"w-full h-60 rounded-2xl"} />
+                  <div className='w-full flex flex-row justify-around'>
+                    <Skeleton className={"w-10 h-4 rounded-2xl"} />
+                    <Skeleton className={"w-10 h-4 rounded-2xl"} />
+                    <Skeleton className={"w-10 h-4 rounded-2xl"} />
+                  </div>
                 </div>
                 <div className='flex flex-col gap-2 p-10'>
                   <div className='flex flex-row md:gap-2 gap-1'>
@@ -23,6 +28,11 @@ const BigSkeletons = () => {
                     </div>
                   </div>
                   <Skeleton className={"w-full h-60 rounded-2xl"} />
+                  <div className='w-full flex flex-row justify-around'>
+                    <Skeleton className={"w-10 h-4 rounded-2xl"} />
+                    <Skeleton className={"w-10 h-4 rounded-2xl"} />
+                    <Skeleton className={"w-10 h-4 rounded-2xl"} />
+                  </div>
                 </div>
     </>
   )

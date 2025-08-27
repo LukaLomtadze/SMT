@@ -35,11 +35,11 @@ const ProfilePosts = ({id, image, name, content, authorId, commentCount, isAdmin
 
 
   return (
-    <div key={id} className={`p-5 border-1 ${i == 0 ? "mt-15" : ""} mb-10 rounded-2xl w-[65%] text-white border-neutral-500`}>
+    <div key={id} className={`p-5 ${i == 0 ? "mt-15" : ""} mb-10 rounded-lg w-[65%] text-white bg-neutral-800 shadow-2xl`}>
         <div className=''>
             <div className=''>
                 <div className='flex flex-row items-center gap-2'>
-                    <img src={image} className='w-8 h-8 rounded-full' />
+                    <img src={image} className='w-10 h-10 rounded-full' />
                     <div className='flex flex-row items-center gap-1 text-white'>
                         <p>{name}</p>
                         {isAdmin || hasBadge ? <MdVerified className='text-sky-400' /> : <></>}
@@ -58,7 +58,7 @@ const ProfilePosts = ({id, image, name, content, authorId, commentCount, isAdmin
 
                 <div className='w-full flex justify-center mt-5 gap-20 text-lg'>
                   <div 
-                    className='cursor-pointer md:text-lg flex gap-1 hover:text-blue-400 flex-row items-center justify-center  rounded-full  text-sm'
+                    className='cursor-pointer md:text-lg flex gap-1 hover:text-blue-400 text-neutral-400 flex-row items-center justify-center  rounded-full  text-sm'
                     onClick={() => {
                       setPostId(id)
                       toggleOpen(isOpen)
@@ -70,28 +70,28 @@ const ProfilePosts = ({id, image, name, content, authorId, commentCount, isAdmin
                       <GoComment />
                     </div>
 
-                    <div className='text-sm'>
+                    <div className='text-[12px]'>
                       {commentCount}
                     </div>
 
                   </div>
-                  <div className='cursor-pointer  flex flex-row items-center justify-center  rounded-full p-1 gap-1  md:text-lg text-sm hover:text-pink-400'
+                  <div className={`cursor-pointer  flex flex-row items-center justify-center  rounded-full p-1 gap-1  md:text-lg text-sm hover:text-pink-400 ${isLiked ? "text-pink-500" : "text-neutral-400"}`}
                      onClick={() => {toggleLike(id)}}
                   >
                   <div className='hover:bg-fuchsia-900 rounded-full p-1'>
                     {isLiked ? (<IoIosHeart className='text-pink-500 shadow-2xl'/>) : (<IoIosHeartEmpty />)}
                   </div>
-                  <p className='text-sm'>
+                  <p className='text-[12px]'>
                     {likesCount}
                   </p>
                   </div>
-                  <div className='cursor-pointer  flex flex-row items-center justify-center hover:text-amber-400 gap-1 rounded-full p-1  md:text-lg text-sm'
+                  <div className={`cursor-pointer  flex flex-row items-center justify-center hover:text-amber-400 gap-1 rounded-full p-1  md:text-lg text-sm ${isBookMarked ? "text-amber-500" : "text-neutral-400"}`}
                   onClick={() => {toggleBookmark(id)}}
                   >
                     <div className='hover:bg-amber-900 p-1 rounded-full'>
                     {isBookMarked ? (<GoBookmarkFill className='text-amber-400' />) : (<GoBookmark />)}
                     </div>
-                    <p className='text-sm'>
+                    <p className={`text-[12px]`}>
                       {bookmarkCount}
                     </p>
                   </div>

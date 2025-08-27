@@ -33,7 +33,7 @@ const DesktopMessages = ({open}) => {
       >
         <div
           className={`${
-            open ? "md:ml-75 md:w-[70vw]" : "md:ml-15 md:w-[90vw]"
+            open ? "md:ml-75 md:w-[70vw]" : "md:ml-20 md:w-[90vw]"
           } h-screen transition-all ease-in-out duration-200`}
         >
           <div className="bg-neutral-800  w-full h-full flex flex-col md:flex-row">
