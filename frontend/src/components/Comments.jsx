@@ -7,6 +7,7 @@ import { MdVerified } from 'react-icons/md';
 import Skeleton from './Skeleton';
 import CommentsSkeleton from './CommentsSkeleton';
 import { NavLink } from 'react-router-dom';
+import { IoMdClose } from "react-icons/io";
 
 const Comments = ({postId}) => {
 
@@ -37,12 +38,19 @@ const Comments = ({postId}) => {
         const minutes = Math.floor(seconds / 60);
         const hours = Math.floor(minutes / 60);
         const days = Math.floor(hours / 24);
+        const weeks = Math.floor(days / 7);
+        const months = Math.floor(days / 30);
+        const years = Math.floor(days / 365);
     
         if(seconds < 60) return `${seconds}s`
         if(minutes < 60) return `${minutes}m`
         if(hours < 24) return `${hours}h`
-        return `${days}d`
+        if(days < 7) return`${days}d`
+        if(weeks < 4) return `${weeks}w`
+        if(months < 12) return `${months}mo`
+        return `${years}y`
     }
+    
   return (
     <>
     {isOpen ? 
@@ -58,7 +66,7 @@ const Comments = ({postId}) => {
 
             
             >
-                <IoMdCloseCircleOutline className='absolute text-neutral-300 top-3 md:text-3xl right-4 text-lg cursor-pointer'
+                <IoMdClose className='absolute text-neutral-300 hover:bg-neutral-600 bg-neutral-700 rounded-full p-1 top-3 md:text-3xl right-4 text-lg cursor-pointer'
                 onClick={() => {toggleOpen(isOpen); setContent("")}}
                 />
                 <div className='w-full flex flex-col items-center gap-4'>

@@ -28,7 +28,7 @@ const SettingsThing = ({editName, user, fieldKey,ChangeWhat,setEditName, handleF
                 <p>{type}:</p>
                 <p className="break-all">{user?.[fieldKey] || "************"}</p>
                 <button
-                    className="w-full sm:w-6 h-6 sm:ml-4 flex items-center justify-center text-black bg-white rounded-sm cursor-pointer mt-2 sm:mt-0"
+                    className="w-full sm:w-6 h-6 sm:ml-4 flex items-center justify-center text-black bg-white hover:bg-neutral-300 rounded-sm cursor-pointer mt-2 sm:mt-0"
                     onClick={() => setEditName(true)}
                 >
                     <MdEditSquare />
@@ -51,23 +51,23 @@ const SettingsThing = ({editName, user, fieldKey,ChangeWhat,setEditName, handleF
                 />
                 <button
                     type="submit"
-                    className="w-full sm:w-8 h-8 text-black bg-white rounded-sm cursor-pointer flex items-center justify-center"
+                    className="w-full sm:w-8 h-8 text-black hover:bg-neutral-300 bg-white rounded-sm cursor-pointer flex items-center justify-center"
                 >
                     {isLoading ? (
                         <AiOutlineLoading3Quarters className="animate-spin" />
                     ) : (
-                        <div className='text-2xl'><VscPassFilled /></div>
+                        <div className='text-2xl hover:bg-neutral-300'><VscPassFilled /></div>
                     )}
                 </button>
                 <button
                     onClick={() => setEditName(false)}
-                    className={`${isLoading ? "bg-neutral-400 cursor-not-allowed" : "bg-white cursor-pointer"} w-full sm:w-8 h-8 text-black rounded-sm flex items-center justify-center`}
+                    className={`${isLoading ? "bg-neutral-400  hover:bg-neutral-300 cursor-not-allowed" : "bg-white cursor-pointer"} w-full sm:w-8 h-8 text-black rounded-sm flex items-center justify-center`}
                     disabled={isLoading}
                 >
                     {isLoading ? (
                         <AiOutlineLoading3Quarters className="animate-spin" />
                     ) : (
-                        <div className='text-2xl'><IoMdCloseCircle /></div>
+                        <div className='text-2xl '><IoMdCloseCircle /></div>
                     )}
                 </button>
             </form>
@@ -122,7 +122,7 @@ const PasswordUpdateForm = ({setEditPass, error ,password, setPassword, isLoadin
                         <Input placeholder={"Repeat New Password"} value={repeatNewPassowrd} onChange={(e) => setRepeatNewPassword(e.target.value)}  isPassword={true} icon={FaLock} name={"repeatPassowrd"} />
                     </div>
                     <div className='flex flex-col gap-3'>
-                        <button type='submit' className='bg-white px-3 py-1 cursor-pointer text-black rounded-sm'>
+                        <button type='submit' className='bg-white hover:bg-neutral-300 px-3 py-1 cursor-pointer text-black rounded-sm'>
                             {
                                 isLoading ? <AiOutlineLoading3Quarters className='animate-spin mx-auto' /> : "Update"
                             }
@@ -131,7 +131,7 @@ const PasswordUpdateForm = ({setEditPass, error ,password, setPassword, isLoadin
                         onClick={() => setEditPass(false)} 
                         type='button' 
                         disabled={isLoading}
-                        className={` px-3 py-1 text-black rounded-sm ${isLoading ? "bg-neutral-500 cursor-not-allowed" : "bg-white cursor-pointer"}`}>
+                        className={` px-3 py-1 text-black hover:bg-neutral-300 rounded-sm ${isLoading ? "bg-neutral-500 cursor-not-allowed" : "bg-white cursor-pointer"}`}>
                             {
                                 isLoading ? 
                                 <AiOutlineLoading3Quarters className='animate-spin mx-auto' />
@@ -227,7 +227,7 @@ const AccountSettingsPage = ({ open }) => {
                 <div className="flex justify-center md:justify-start mt-5">
                     {isLoadingImage ?
                      <Skeleton className={"w-20 h-20 z-10 flex flex-row items-center justify-center md:w-32 rounded-full md:h-32"}>
-                        <AiOutlineLoading3Quarters className='w-14 z-50 h-14 md:w-24 md:h-24  mx-auto animate-[spin_0.4s_linear_infinite] ' />
+                        <AiOutlineLoading3Quarters className='w-14 z-50 h-14 md:w-24 md:h-24  mx-auto animate-[spin_0.3s_linear_infinite] ' />
                      </Skeleton> : 
                      <><input
                         type='file' 
@@ -251,9 +251,14 @@ const AccountSettingsPage = ({ open }) => {
                     <SettingsThing type={"Name"} fieldKey={"name"} ChangeWhat={name} editName={editName} setEditName={setEditName} user={user} handleForm={handleForm}  isLoading={isLoading} setName={setName}/>
 
                     
-                    <div className="text-white break-all flex flex-row gap-3">
+                    <div className="text-white break-all flex items-center flex-row gap-3">
                         <p>Email: </p>
                         <p>{user?.email}</p>
+                        <div 
+                            disabled={true} 
+                            className='text-black bg-white p-1 rounded-sm cursor-not-allowed'>
+                            <FaLock />
+                        </div>
                     </div>
 
                     <div>

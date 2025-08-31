@@ -19,6 +19,7 @@ import AdminPage from "./pages/AdminPage"
 import MessagingPage from "./pages/MessagingPage"
 import { FaBell } from "react-icons/fa";
 import Notifications from "./pages/Notifications"
+import FoxLogoLoader from "./BigComponents/FoxLogoLoader"
 
 //route protection sanam logined ar arian manamde ro ver miwvdenen home pagebs da egetebs
 
@@ -61,7 +62,7 @@ const ProtectRoute = ({ children }) => {
   if(isCheckingAuth){
     return (
       <div className="min-h-screen flex items-center text-3xl justify-center bg-[#212121] text-sky-400">
-        <AiOutlineLoading3Quarters className="animate-spin mx-auto" />
+        <FoxLogoLoader />
       </div>
     )
   }
@@ -90,7 +91,7 @@ const RedirectAuthenticatedUser = ({children}) => {
   if(isCheckingAuth){
     return (
       <div className="min-h-screen flex items-center text-3xl justify-center bg-[#212121] text-sky-400">
-        <AiOutlineLoading3Quarters className="animate-spin mx-auto" />
+        <FoxLogoLoader />
       </div>
     )
   }

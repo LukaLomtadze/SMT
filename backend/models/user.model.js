@@ -1,6 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 
-const defaultImage = 'https://s3.eu-central-1.amazonaws.com/uploads.mangoweb.org/shared-prod/visegradfund.org/uploads/2021/08/placeholder-male.jpg'
+const defaultImage = 'https://i.pinimg.com/474x/0e/53/97/0e53973045af09690a585416fba9394c.jpg'
 
 const userSchema = new mongoose.Schema({
     email: {

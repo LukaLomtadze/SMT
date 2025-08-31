@@ -11,16 +11,6 @@ const AdminPageSkeletons = () => {
                 <Skeleton className={"rounded-2xl w-[96%] md:h-8 h-6"} />
             </div>)
         )}
-
-        <div className='my-3 flex flex-row gap-3 items-center'>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-          <Skeleton className={"w-8 h-8 rounded-sm"}/>
-        </div>
     </div>
   )
 }

@@ -157,11 +157,17 @@ const HomePage = ({ open }) => {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
 
     if(seconds < 60) return `${seconds}s`
     if(minutes < 60) return `${minutes}m`
     if(hours < 24) return `${hours}h`
-    return `${days}d`
+    if(days < 7) return`${days}d`
+    if(weeks < 4) return `${weeks}w`
+    if(months < 12) return `${months}mo`
+    return `${years}y`
   }
 
   const handlePostUpload = async() => {
@@ -268,7 +274,7 @@ const HomePage = ({ open }) => {
               posts.map((item, i) => {
                 
                 return(
-                  <div key={i} className={`p-5 bg-neutral-800 shadow-2xl mb-10 ${i == 0 ? "mt-15" : ""} rounded-lg ${i == posts.length - 1 ? "mb-10" : ""} w-[90%]  text-white border-neutral-500`}>
+                  <div key={i} className={`p-5 bg-neutral-800 shadow-2xl mb-10 ${i == 0 ? "mt-15" : ""} rounded-lg ${i == posts.length - 1 ? "mb-10" : ""} w-[90%]  text-white border-neutral-700`}>
                     <div className='flex gap-2 flex-row justify-between'>
                       <div className='flex gap-2 flex-row items'>
                       <NavLink to={`${FRONT_URL}${item.author._id}`} className={"w-8 h-8 md:w-12 md:h-12"}>

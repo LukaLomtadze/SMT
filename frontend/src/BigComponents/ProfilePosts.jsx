@@ -15,17 +15,23 @@ const ProfilePosts = ({id, image, name, content, authorId, commentCount, isAdmin
 
   const calculateUploadDate = (date) => {
     const dateNow = Date.now()
-    const diff = dateNow - new Date(date).getTime()
+    const diff = dateNow - new Date(date).getTime();
 
-    const seconds = Math.floor(diff / 1000)
-    const minutes = Math.floor(seconds / 60)
-    const hours = Math.floor(minutes / 60)
-    const days = Math.floor(hours / 24)
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
 
     if(seconds < 60) return `${seconds}s`
     if(minutes < 60) return `${minutes}m`
     if(hours < 24) return `${hours}h`
-    return `${days}d`
+    if(days < 7) return`${days}d`
+    if(weeks < 4) return `${weeks}w`
+    if(months < 12) return `${months}mo`
+    return `${years}y`
   }
 
   const {isOpen, toggleOpen, getComments} = useCommentStore()
